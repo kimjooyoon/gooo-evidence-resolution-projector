@@ -849,7 +849,7 @@ func viewManifests(views []ViewProjection) []ViewManifest {
 		result = append(result, ViewManifest{
 			ID:                view.ID,
 			Label:             view.Label,
-			OmittedFieldIDs:   append([]string(nil), view.OmittedFieldIDs...),
+			OmittedFieldIDs:   append([]string{}, view.OmittedFieldIDs...),
 			OmittedFieldCount: view.OmittedFieldCount,
 		})
 	}
