@@ -17,11 +17,11 @@ import (
 const (
 	OutputManifest = "projection-manifest.json"
 	OutputGraph    = "evidence-graph.json"
-	OutputEvents    = "projection-events.ndjson"
-	OutputUser      = "user-view.md"
-	OutputOperator  = "operator-view.md"
-	OutputAuditor   = "auditor-view.md"
-	OutputReceipt   = "projection-receipt.json"
+	OutputEvents   = "projection-events.ndjson"
+	OutputUser     = "user-view.md"
+	OutputOperator = "operator-view.md"
+	OutputAuditor  = "auditor-view.md"
+	OutputReceipt  = "projection-receipt.json"
 )
 
 var OutputNames = []string{
@@ -831,15 +831,15 @@ func makeReceipt(graph model.Graph, inventory Inventory, decisionDigest string, 
 		files = append(files, ReceiptFile{Name: name, SizeBytes: len(data), SHA256: digest(data)})
 	}
 	return Receipt{
-		ReceiptVersion:        "1.0.0",
-		Status:                "verified",
-		GraphID:               graph.ID,
-		Release:               graph.Release,
-		DecisionDigest:        decisionDigest,
-		Inventory:             inventory,
+		ReceiptVersion:         "1.0.0",
+		Status:                 "verified",
+		GraphID:                graph.ID,
+		Release:                graph.Release,
+		DecisionDigest:         decisionDigest,
+		Inventory:              inventory,
 		CallerOwnedOutputKinds: append([]string(nil), OutputNames...),
-		Files:                 files,
-		SelfDigestPolicy:      "receipt digest is verified externally because a file cannot contain its own final digest",
+		Files:                  files,
+		SelfDigestPolicy:       "receipt digest is verified externally because a file cannot contain its own final digest",
 	}
 }
 
