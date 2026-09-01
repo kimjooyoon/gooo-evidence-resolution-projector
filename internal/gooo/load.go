@@ -19,4 +19,3 @@ func Load(path string) (model.SourceDocument, []byte, error) {
 	}
 	return document, data, nil
 }
-

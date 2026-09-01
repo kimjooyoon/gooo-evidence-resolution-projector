@@ -44,4 +44,3 @@ func TestReleasedGoooConformance(t *testing.T) {
 		}
 	}
 }
-

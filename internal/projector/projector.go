@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	OutputManifest  = "projection-manifest.json"
-	OutputGraph     = "evidence-graph.json"
+	OutputManifest = "projection-manifest.json"
+	OutputGraph    = "evidence-graph.json"
 	OutputEvents    = "projection-events.ndjson"
 	OutputUser      = "user-view.md"
 	OutputOperator  = "operator-view.md"
@@ -35,38 +35,38 @@ var OutputNames = []string{
 }
 
 type GraphOutput struct {
-	GraphID                string              `json:"graph_id"`
-	Release                string              `json:"release"`
-	ProjectionSchemaVersion string             `json:"projection_schema_version"`
-	DecisionOrder           []string            `json:"decision_order"`
-	DecisionDigest          string              `json:"decision_digest"`
-	Activities              []model.Activity    `json:"activities"`
-	Evidence                []model.Evidence    `json:"evidence"`
-	Cases                   []CaseOutput        `json:"cases"`
+	GraphID                 string           `json:"graph_id"`
+	Release                 string           `json:"release"`
+	ProjectionSchemaVersion string           `json:"projection_schema_version"`
+	DecisionOrder           []string         `json:"decision_order"`
+	DecisionDigest          string           `json:"decision_digest"`
+	Activities              []model.Activity `json:"activities"`
+	Evidence                []model.Evidence `json:"evidence"`
+	Cases                   []CaseOutput     `json:"cases"`
 }
 
 type CaseOutput struct {
-	ID                        string                    `json:"id"`
-	Title                     string                    `json:"title"`
-	Summary                   string                    `json:"summary"`
-	SummaryRefs               []string                  `json:"summary_refs"`
-	ExpectedDecision          string                    `json:"expected_decision"`
-	ActivityID                string                    `json:"activity_id"`
-	Decision                  string                    `json:"decision"`
-	DecisionRank              int                       `json:"decision_rank"`
-	DecisionDigest            string                    `json:"decision_digest"`
-	Claims                    []model.Claim             `json:"claims"`
-	ClaimStates               []ClaimState               `json:"claim_states"`
-	ProofChoices              []ProofChoice              `json:"proof_choices"`
-	EvidenceIDs               []string                  `json:"evidence_ids"`
-	EvidenceDescriptions      []EvidenceDescription     `json:"evidence_descriptions"`
-	UnknownFrontier           *model.UnknownFrontier     `json:"unknown_frontier"`
-	Counterexamples           []model.Counterexample     `json:"counterexamples"`
-	CounterexampleIDs         []string                  `json:"counterexample_ids"`
+	ID                         string                      `json:"id"`
+	Title                      string                      `json:"title"`
+	Summary                    string                      `json:"summary"`
+	SummaryRefs                []string                    `json:"summary_refs"`
+	ExpectedDecision           string                      `json:"expected_decision"`
+	ActivityID                 string                      `json:"activity_id"`
+	Decision                   string                      `json:"decision"`
+	DecisionRank               int                         `json:"decision_rank"`
+	DecisionDigest             string                      `json:"decision_digest"`
+	Claims                     []model.Claim               `json:"claims"`
+	ClaimStates                []ClaimState                `json:"claim_states"`
+	ProofChoices               []ProofChoice               `json:"proof_choices"`
+	EvidenceIDs                []string                    `json:"evidence_ids"`
+	EvidenceDescriptions       []EvidenceDescription       `json:"evidence_descriptions"`
+	UnknownFrontier            *model.UnknownFrontier      `json:"unknown_frontier"`
+	Counterexamples            []model.Counterexample      `json:"counterexamples"`
+	CounterexampleIDs          []string                    `json:"counterexample_ids"`
 	CounterexampleDescriptions []CounterexampleDescription `json:"counterexample_descriptions"`
-	SourceContext             string                    `json:"source_context"`
-	OperatorNotes             string                    `json:"operator_notes"`
-	AuditTrace                string                    `json:"audit_trace"`
+	SourceContext              string                      `json:"source_context"`
+	OperatorNotes              string                      `json:"operator_notes"`
+	AuditTrace                 string                      `json:"audit_trace"`
 }
 
 type ClaimState struct {
@@ -123,15 +123,15 @@ type ProjectionEvent struct {
 }
 
 type Inventory struct {
-	GoooActivities            int            `json:"gooo_activities"`
-	CanonicalCases            int            `json:"canonical_cases"`
-	CasesByDecision           map[string]int `json:"cases_by_decision"`
-	ReaderResolutions         int            `json:"reader_resolutions"`
-	CallerOwnedOutputKinds    int            `json:"caller_owned_output_kinds"`
-	ProjectionEvents          int            `json:"projection_events"`
-	InputRepoMutations        int            `json:"input_repo_mutations"`
-	SourceMutations           int            `json:"source_mutations"`
-	RuntimeSideEffects        int            `json:"runtime_side_effects"`
+	GoooActivities         int            `json:"gooo_activities"`
+	CanonicalCases         int            `json:"canonical_cases"`
+	CasesByDecision        map[string]int `json:"cases_by_decision"`
+	ReaderResolutions      int            `json:"reader_resolutions"`
+	CallerOwnedOutputKinds int            `json:"caller_owned_output_kinds"`
+	ProjectionEvents       int            `json:"projection_events"`
+	InputRepoMutations     int            `json:"input_repo_mutations"`
+	SourceMutations        int            `json:"source_mutations"`
+	RuntimeSideEffects     int            `json:"runtime_side_effects"`
 }
 
 type ViewManifest struct {
@@ -142,17 +142,17 @@ type ViewManifest struct {
 }
 
 type Manifest struct {
-	ManifestVersion       string         `json:"manifest_version"`
-	GraphID               string         `json:"graph_id"`
-	Release               string         `json:"release"`
-	GoooSource            string         `json:"gooo_source"`
-	GoooSourceSHA256      string         `json:"gooo_source_sha256"`
-	CanonicalGraphSHA256  string         `json:"canonical_graph_sha256"`
-	DecisionDigest        string         `json:"decision_digest"`
-	DecisionOrder         []string       `json:"decision_order"`
-	Inventory             Inventory      `json:"inventory"`
-	CallerOwnedOutputKinds []string      `json:"caller_owned_output_kinds"`
-	Views                 []ViewManifest `json:"views"`
+	ManifestVersion        string         `json:"manifest_version"`
+	GraphID                string         `json:"graph_id"`
+	Release                string         `json:"release"`
+	GoooSource             string         `json:"gooo_source"`
+	GoooSourceSHA256       string         `json:"gooo_source_sha256"`
+	CanonicalGraphSHA256   string         `json:"canonical_graph_sha256"`
+	DecisionDigest         string         `json:"decision_digest"`
+	DecisionOrder          []string       `json:"decision_order"`
+	Inventory              Inventory      `json:"inventory"`
+	CallerOwnedOutputKinds []string       `json:"caller_owned_output_kinds"`
+	Views                  []ViewManifest `json:"views"`
 }
 
 type ReceiptFile struct {
@@ -162,15 +162,15 @@ type ReceiptFile struct {
 }
 
 type Receipt struct {
-	ReceiptVersion        string       `json:"receipt_version"`
-	Status                string       `json:"status"`
-	GraphID               string       `json:"graph_id"`
-	Release               string       `json:"release"`
-	DecisionDigest        string       `json:"decision_digest"`
-	Inventory             Inventory    `json:"inventory"`
-	CallerOwnedOutputKinds []string    `json:"caller_owned_output_kinds"`
-	Files                 []ReceiptFile `json:"content_files"`
-	SelfDigestPolicy      string       `json:"self_digest_policy"`
+	ReceiptVersion         string        `json:"receipt_version"`
+	Status                 string        `json:"status"`
+	GraphID                string        `json:"graph_id"`
+	Release                string        `json:"release"`
+	DecisionDigest         string        `json:"decision_digest"`
+	Inventory              Inventory     `json:"inventory"`
+	CallerOwnedOutputKinds []string      `json:"caller_owned_output_kinds"`
+	Files                  []ReceiptFile `json:"content_files"`
+	SelfDigestPolicy       string        `json:"self_digest_policy"`
 }
 
 type Result struct {
@@ -241,11 +241,11 @@ func Project(document model.SourceDocument, sourceBytes []byte) (Result, error) 
 		GraphID:                 document.Graph.ID,
 		Release:                 document.Graph.Release,
 		ProjectionSchemaVersion: document.Graph.Projection.SchemaVersion,
-		DecisionOrder:            append([]string(nil), document.Graph.Projection.DecisionOrder...),
-		DecisionDigest:           decisionDigest,
-		Activities:               append([]model.Activity(nil), document.Graph.Activities...),
-		Evidence:                 append([]model.Evidence(nil), document.Graph.Evidence...),
-		Cases:                    cases,
+		DecisionOrder:           append([]string(nil), document.Graph.Projection.DecisionOrder...),
+		DecisionDigest:          decisionDigest,
+		Activities:              append([]model.Activity(nil), document.Graph.Activities...),
+		Evidence:                append([]model.Evidence(nil), document.Graph.Evidence...),
+		Cases:                   cases,
 	}
 
 	views, events, err := buildViews(document.Graph, graph)
@@ -764,7 +764,7 @@ func renderView(view ViewProjection, graph GraphOutput) ([]byte, error) {
 	fmt.Fprintf(&buffer, "- omitted field IDs: %s\n", formatIDs(view.OmittedFieldIDs))
 	fmt.Fprintf(&buffer, "- omitted field count: `%d`\n", view.OmittedFieldCount)
 	buffer.WriteString("- projection contract: omitted context is loss-declared; invariant evidence and decisions remain reverse-referenceable.\n\n")
-		for _, item := range view.Cases {
+	for _, item := range view.Cases {
 		fmt.Fprintf(&buffer, "## %s\n\n", item.CaseID)
 		fmt.Fprintf(&buffer, "- decision: `%s`\n", item.Decision)
 		fmt.Fprintf(&buffer, "- decision digest: `%s`\n", item.DecisionDigest)
@@ -876,14 +876,14 @@ func rankByDecision(order []string) map[string]int {
 
 func computeDecisionDigest(cases []CaseOutput) (string, error) {
 	type material struct {
-		ID                 string                    `json:"id"`
-		Decision           string                    `json:"decision"`
-		DecisionRank       int                       `json:"decision_rank"`
-		ClaimStates        []ClaimState              `json:"claim_states"`
-		ProofChoices       []ProofChoice              `json:"proof_choices"`
-		EvidenceIDs        []string                  `json:"evidence_ids"`
-		Counterexamples    []CounterexampleDescription `json:"counterexamples"`
-		UnknownFrontier    *model.UnknownFrontier     `json:"unknown_frontier"`
+		ID              string                      `json:"id"`
+		Decision        string                      `json:"decision"`
+		DecisionRank    int                         `json:"decision_rank"`
+		ClaimStates     []ClaimState                `json:"claim_states"`
+		ProofChoices    []ProofChoice               `json:"proof_choices"`
+		EvidenceIDs     []string                    `json:"evidence_ids"`
+		Counterexamples []CounterexampleDescription `json:"counterexamples"`
+		UnknownFrontier *model.UnknownFrontier      `json:"unknown_frontier"`
 	}
 	materials := make([]material, 0, len(cases))
 	for _, item := range cases {

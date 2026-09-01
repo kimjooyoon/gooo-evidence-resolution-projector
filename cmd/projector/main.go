@@ -27,9 +27,7 @@ func main() {
 	}
 	fmt.Printf("generated graph=%s decision_digest=%s outputs=%d\n", result.Graph.GraphID, result.Graph.DecisionDigest, len(result.OutputContents))
 }
-
 func fail(err error) {
 	fmt.Fprintln(os.Stderr, err)
 	os.Exit(1)
 }
-

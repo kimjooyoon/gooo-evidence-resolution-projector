@@ -37,7 +37,6 @@ func TestProjectionPreservesInvariantFieldsAcrossViews(t *testing.T) {
 		}
 	}
 }
-
 func TestWriteOutputsHasExactlySevenKinds(t *testing.T) {
 	root := filepath.Join("..", "..")
 	result, err := LoadAndProject(filepath.Join(root, ".gooo", "released.gooo"))
@@ -61,4 +60,3 @@ func TestWriteOutputsHasExactlySevenKinds(t *testing.T) {
 		}
 	}
 }
-

@@ -17,12 +17,12 @@ type Graph struct {
 }
 
 type Projection struct {
-	SchemaVersion string           `json:"schema_version"`
-	DecisionOrder []string         `json:"decision_order"`
-	SemanticRules SemanticRules    `json:"semantic_rules"`
+	SchemaVersion string            `json:"schema_version"`
+	DecisionOrder []string          `json:"decision_order"`
+	SemanticRules SemanticRules     `json:"semantic_rules"`
 	Fields        []ProjectionField `json:"fields"`
 	Groups        []ProjectionGroup `json:"groups"`
-	Views         []ViewSpec       `json:"views"`
+	Views         []ViewSpec        `json:"views"`
 }
 
 type SemanticRules struct {
@@ -63,33 +63,33 @@ type Binding struct {
 }
 
 type Evidence struct {
-	ID         string `json:"id"`
-	Kind       string `json:"kind"`
+	ID          string `json:"id"`
+	Kind        string `json:"kind"`
 	Description string `json:"description"`
-	SourceRef  string `json:"source_ref"`
+	SourceRef   string `json:"source_ref"`
 }
 
 type Case struct {
-	ID              string           `json:"id"`
-	Title           string           `json:"title"`
-	Summary         string           `json:"summary"`
-	SummaryRefs     []string         `json:"summary_refs"`
+	ID               string           `json:"id"`
+	Title            string           `json:"title"`
+	Summary          string           `json:"summary"`
+	SummaryRefs      []string         `json:"summary_refs"`
 	ExpectedDecision string           `json:"expected_decision"`
-	ActivityID      string           `json:"activity_id"`
-	SourceContext   string           `json:"source_context"`
-	OperatorNotes   string           `json:"operator_notes"`
-	AuditTrace      string           `json:"audit_trace"`
-	Claims          []Claim          `json:"claims"`
-	UnknownFrontier *UnknownFrontier `json:"unknown_frontier"`
-	Counterexamples []Counterexample `json:"counterexamples"`
+	ActivityID       string           `json:"activity_id"`
+	SourceContext    string           `json:"source_context"`
+	OperatorNotes    string           `json:"operator_notes"`
+	AuditTrace       string           `json:"audit_trace"`
+	Claims           []Claim          `json:"claims"`
+	UnknownFrontier  *UnknownFrontier `json:"unknown_frontier"`
+	Counterexamples  []Counterexample `json:"counterexamples"`
 }
 
 type Claim struct {
-	ID           string    `json:"id"`
-	State        string    `json:"state"`
-	ProofChoice  string    `json:"proof_choice"`
-	EvidenceIDs  []string  `json:"evidence_ids"`
-	Utility      *Utility  `json:"utility"`
+	ID          string   `json:"id"`
+	State       string   `json:"state"`
+	ProofChoice string   `json:"proof_choice"`
+	EvidenceIDs []string `json:"evidence_ids"`
+	Utility     *Utility `json:"utility"`
 }
 
 type Utility struct {
@@ -108,9 +108,8 @@ type UnknownFrontier struct {
 }
 
 type Counterexample struct {
-	ID         string   `json:"id"`
-	ClaimID    string   `json:"claim_id"`
+	ID          string   `json:"id"`
+	ClaimID     string   `json:"claim_id"`
 	Description string   `json:"description"`
 	EvidenceIDs []string `json:"evidence_ids"`
 }
-

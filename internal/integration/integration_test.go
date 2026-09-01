@@ -30,7 +30,6 @@ func TestProjectorIntegrationRoundTrip(t *testing.T) {
 		t.Fatalf("manifest graph digest mismatch")
 	}
 }
-
 func fmtDigest(data []byte) string {
 	const hex = "0123456789abcdef"
 	output := make([]byte, len(data)*2)
@@ -40,4 +39,3 @@ func fmtDigest(data []byte) string {
 	}
 	return string(output)
 }
-
