@@ -550,7 +550,7 @@ func validateDocument(document model.SourceDocument) error {
 }
 
 func evaluateCase(graph model.Graph, sourceCase model.Case, evidenceByID map[string]model.Evidence, activityByCase map[string]model.Activity, ranks map[string]int) (CaseOutput, error) {
-	if activityByCase[sourceCase.ID].ID == "" || activityByCase[sourceCase.ID].ID == "" {
+	if activityByCase[sourceCase.ID].ID == "" {
 		return CaseOutput{}, fmt.Errorf("case %q has no activity binding", sourceCase.ID)
 	}
 	bestState := ""
