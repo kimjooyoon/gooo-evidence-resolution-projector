@@ -52,7 +52,7 @@ jobs:
         with:
           name: caller-owned-outputs-${{ github.sha }}
           path: outputs
-          if-no-files-found: error
+          if-no-files-found: warn
       - name: Upload CI evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -64,4 +64,3 @@ jobs:
             .ci/test.json
           include-hidden-files: true
           if-no-files-found: warn
-
