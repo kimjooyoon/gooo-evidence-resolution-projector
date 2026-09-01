@@ -41,7 +41,10 @@ jobs:
       - name: Integration
         run: ./scripts/measure.sh integration .ci/metrics.json go test -tags=integration ./internal/integration
       - name: Formatting check
-        run: test -z "$(gofmt -l cmd internal)"
+        run: |
+          files=$(gofmt -l cmd internal)
+          printf '%s\n' "$files"
+          test -z "$files"
       - name: Generate seven caller-owned outputs
         run: go run ./cmd/projector --check --out outputs
       - name: Validate seven caller-owned outputs
