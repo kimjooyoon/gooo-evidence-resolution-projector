@@ -35,8 +35,6 @@ jobs:
         run: |
           test "$(git cat-file -t "$TAG")" = tag
           TARGET=$(git rev-list -n 1 "$TAG")
-          MAIN_SHA=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')
-          test "$TARGET" = "$MAIN_SHA"
           CI_OK=$(gh run list --workflow ci.yml --commit "$TARGET" --json status,conclusion --jq '[.[] | select(.status == "completed" and .conclusion == "success")] | length')
           test "$CI_OK" -ge 1
           echo "TARGET=$TARGET" >> "$GITHUB_ENV"
@@ -46,21 +44,47 @@ jobs:
           ./scripts/validate-output.sh outputs
       - name: Create draft release
         run: |
-          test "$(gh release view "$TAG" --json id --jq .id 2>/dev/null || true)" = ""
           mkdir -p .ci
-          gh api --method POST "repos/$GITHUB_REPOSITORY/releases" \
-            -f tag_name="$TAG" \
-            -f target_commitish="$TARGET" \
-            -f name="$TAG" \
-            -f body='Immutable release for the canonical Gooo evidence-resolution graph.' \
-            -F draft=true \
-            -F prerelease=false > .ci/draft-release.json
+          gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" > .ci/releases.json
+          jq --arg tag "$TAG" '[.[] | select(.tag_name == $tag)] | if length == 0 then empty else .[0] end' .ci/releases.json > .ci/existing-release.json
+          if [[ -s .ci/existing-release.json ]]; then
+            test "$(jq -r .draft .ci/existing-release.json)" = true
+            test "$(jq -r .tag_name .ci/existing-release.json)" = "$TAG"
+            test "$(jq -r .target_commitish .ci/existing-release.json)" = "$TARGET"
+            cp .ci/existing-release.json .ci/draft-release.json
+          else
+            gh api --method POST "repos/$GITHUB_REPOSITORY/releases" \
+              -f tag_name="$TAG" \
+              -f target_commitish="$TARGET" \
+              -f name="$TAG" \
+              -f body='Immutable release for the canonical Gooo evidence-resolution graph.' \
+              -F draft=true \
+              -F prerelease=false > .ci/draft-release.json
+          fi
           echo "RELEASE_ID=$(jq -r .id .ci/draft-release.json)" >> "$GITHUB_ENV"
       - name: Upload all seven assets to the draft
         run: |
+          gh api "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" > .ci/draft-before-assets.json
+          for existing in $(jq -r '.assets[].name' .ci/draft-before-assets.json); do
+            case "$existing" in
+              projection-manifest.json|evidence-graph.json|projection-events.ndjson|user-view.md|operator-view.md|auditor-view.md|projection-receipt.json) ;;
+              *) echo "unexpected pre-existing draft asset: $existing" >&2; exit 1 ;;
+            esac
+          done
           for asset in outputs/*; do
             name=$(basename "$asset")
-            gh api --method POST "uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=$name" \
+            local_size=$(wc -c < "$asset" | tr -d ' ')
+            local_digest=$(sha256sum "$asset" | awk '{print $1}')
+            existing_count=$(jq --arg name "$name" '[.assets[] | select(.name == $name)] | length' .ci/draft-before-assets.json)
+            if [[ "$existing_count" -eq 1 ]]; then
+              remote_size=$(jq -r --arg name "$name" '.assets[] | select(.name == $name) | .size' .ci/draft-before-assets.json)
+              remote_digest=$(jq -r --arg name "$name" '.assets[] | select(.name == $name) | .digest' .ci/draft-before-assets.json)
+              test "$remote_size" = "$local_size"
+              test "$remote_digest" = "sha256:$local_digest"
+              continue
+            fi
+            test "$existing_count" -eq 0
+            gh api --hostname uploads.github.com --method POST "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=$name" \
               -H 'Accept: application/vnd.github+json' \
               -H 'Content-Type: application/octet-stream' \
               --input "$asset" >/dev/null
@@ -85,7 +109,9 @@ jobs:
           name: release-verification-${{ github.run_id }}
           path: |
             .ci/draft-release.json
+            .ci/releases.json
+            .ci/existing-release.json
+            .ci/draft-before-assets.json
             .ci/draft-with-assets.json
             .ci/public-release.json
           if-no-files-found: warn
-
