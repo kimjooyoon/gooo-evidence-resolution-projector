@@ -84,10 +84,12 @@ jobs:
               continue
             fi
             test "$existing_count" -eq 0
-            gh api --hostname uploads.github.com --method POST "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=$name" \
+            curl --fail-with-body --silent --show-error -L -X POST \
+              -H "Authorization: Bearer $GH_TOKEN" \
               -H 'Accept: application/vnd.github+json' \
               -H 'Content-Type: application/octet-stream' \
-              --input "$asset" >/dev/null
+              --data-binary "@$asset" \
+              "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=$name" >/dev/null
           done
       - name: Verify draft asset size and digest
         run: |
