@@ -42,9 +42,11 @@ jobs:
         run: ./scripts/measure.sh integration .ci/metrics.json go test -tags=integration ./internal/integration
       - name: Formatting check
         run: |
-          files=$(gofmt -l cmd internal)
-          printf '%s\n' "$files"
-          test -z "$files"
+          gofmt -d cmd internal > .ci/gofmt.patch
+          if [[ -s .ci/gofmt.patch ]]; then
+            cat .ci/gofmt.patch
+            exit 1
+          fi
       - name: Generate seven caller-owned outputs
         run: go run ./cmd/projector --check --out outputs
       - name: Validate seven caller-owned outputs
@@ -65,5 +67,6 @@ jobs:
             .ci/metrics.json
             .ci/test-summary.json
             .ci/test.json
+            .ci/gofmt.patch
           include-hidden-files: true
           if-no-files-found: warn
