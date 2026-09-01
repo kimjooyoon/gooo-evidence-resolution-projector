@@ -1,0 +1,67 @@
+name: authoritative-ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v5
+        with:
+          token: ${{ github.token }}
+      - name: Set up Go 1.27
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.27.x'
+          cache: true
+      - name: Initialize CI evidence directory
+        run: mkdir -p .ci && printf '%s\n' '{"schema_version":"1.0.0","steps":{}}' > .ci/metrics.json
+      - name: Policy checks
+        run: ./scripts/policy-check.sh
+      - name: Compile
+        run: ./scripts/measure.sh compile .ci/metrics.json go test -run '^$' ./...
+      - name: Build
+        run: ./scripts/measure.sh build .ci/metrics.json go build ./...
+      - name: Test
+        run: ./scripts/measure.sh test .ci/metrics.json sh -c 'go test -json ./... > .ci/test.json'
+      - name: Summarize tests
+        if: always()
+        run: ./scripts/summarize-tests.sh .ci/test.json .ci/test-summary.json .ci/metrics.json
+      - name: Conformance
+        run: ./scripts/measure.sh conformance .ci/metrics.json go test ./internal/conformance
+      - name: Integration
+        run: ./scripts/measure.sh integration .ci/metrics.json go test -tags=integration ./internal/integration
+      - name: Formatting check
+        run: test -z "$(gofmt -l cmd internal)"
+      - name: Generate seven caller-owned outputs
+        run: go run ./cmd/projector --check --out outputs
+      - name: Validate seven caller-owned outputs
+        run: ./scripts/validate-output.sh outputs
+      - name: Upload caller-owned outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: caller-owned-outputs-${{ github.sha }}
+          path: outputs
+          if-no-files-found: error
+      - name: Upload CI evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-evidence-${{ github.sha }}
+          path: |
+            .ci/metrics.json
+            .ci/test-summary.json
+            .ci/test.json
+          include-hidden-files: true
+          if-no-files-found: warn
+

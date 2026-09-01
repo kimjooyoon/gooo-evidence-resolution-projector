@@ -1,0 +1,220 @@
+{
+  "language": "gooo",
+  "language_version": "0.1",
+  "graph": {
+    "id": "gooo-evidence-resolution-projector",
+    "release": "v0.1.0",
+    "projection": {
+      "schema_version": "1.0.0",
+      "decision_order": ["REFUTED", "UNKNOWN", "CLOSED"],
+      "semantic_rules": {
+        "refuted_state": "REFUTED",
+        "unknown_state": "UNKNOWN",
+        "closed_state": "CLOSED",
+        "external_utility_zero_evidence_state": "UNKNOWN"
+      },
+      "fields": [
+        {"id": "case_id", "label": "Case ID", "source": "id", "invariant": true, "allowed_omission": []},
+        {"id": "title", "label": "Title", "source": "title", "invariant": true, "allowed_omission": []},
+        {"id": "summary", "label": "Loss-declared summary", "source": "summary", "invariant": true, "allowed_omission": []},
+        {"id": "summary_refs", "label": "Summary stable references", "source": "summary_refs", "invariant": true, "allowed_omission": []},
+        {"id": "decision", "label": "Decision", "source": "decision", "invariant": true, "allowed_omission": []},
+        {"id": "decision_digest", "label": "Decision digest", "source": "decision_digest", "invariant": true, "allowed_omission": []},
+        {"id": "claim_state", "label": "Claim state", "source": "claim_states", "invariant": true, "allowed_omission": []},
+        {"id": "proof_choice", "label": "Proof choice", "source": "proof_choices", "invariant": true, "allowed_omission": []},
+        {"id": "evidence_ids", "label": "Evidence IDs", "source": "evidence_ids", "invariant": true, "allowed_omission": []},
+        {"id": "evidence_descriptions", "label": "Evidence descriptions", "source": "evidence_descriptions", "invariant": true, "allowed_omission": []},
+        {"id": "counterexample_ids", "label": "REFUTED counterexample IDs", "source": "counterexample_ids", "invariant": true, "allowed_omission": []},
+        {"id": "counterexample_descriptions", "label": "REFUTED counterexamples", "source": "counterexample_descriptions", "invariant": true, "allowed_omission": []},
+        {"id": "unknown.stage", "label": "UNKNOWN stage", "source": "unknown_frontier.stage", "invariant": true, "allowed_omission": []},
+        {"id": "unknown.step", "label": "UNKNOWN step", "source": "unknown_frontier.step", "invariant": true, "allowed_omission": []},
+        {"id": "unknown.reason", "label": "UNKNOWN reason", "source": "unknown_frontier.reason", "invariant": true, "allowed_omission": []},
+        {"id": "unknown.unknown_class", "label": "UNKNOWN class", "source": "unknown_frontier.unknown_class", "invariant": true, "allowed_omission": []},
+        {"id": "unknown.next_operation", "label": "UNKNOWN next operation", "source": "unknown_frontier.next_operation", "invariant": true, "allowed_omission": []},
+        {"id": "unknown.blocked_by", "label": "UNKNOWN blocked by", "source": "unknown_frontier.blocked_by", "invariant": true, "allowed_omission": []},
+        {"id": "source_context", "label": "Source context", "source": "source_context", "invariant": false, "allowed_omission": ["user", "operator"]},
+        {"id": "operator_notes", "label": "Operator notes", "source": "operator_notes", "invariant": false, "allowed_omission": ["user"]},
+        {"id": "audit_trace", "label": "Audit trace", "source": "audit_trace", "invariant": false, "allowed_omission": ["user", "operator"]}
+      ],
+      "groups": [
+        {"id": "unknown_causal_frontier", "field_ids": ["unknown.stage", "unknown.step", "unknown.reason", "unknown.unknown_class", "unknown.next_operation", "unknown.blocked_by"], "exact_count": 6}
+      ],
+      "views": [
+        {"id": "user", "label": "User", "omits": ["source_context", "operator_notes", "audit_trace"]},
+        {"id": "operator", "label": "Operator", "omits": ["source_context", "audit_trace"]},
+        {"id": "auditor", "label": "Auditor", "omits": []}
+      ]
+    },
+    "activities": [
+      {"id": "activity.collect-invoice", "name": "Collect invoice evidence", "binding": {"case_id": "case-closed-1"}},
+      {"id": "activity.reconcile-ledger", "name": "Reconcile ledger evidence", "binding": {"case_id": "case-closed-2"}},
+      {"id": "activity.verify-signature", "name": "Verify signature evidence", "binding": {"case_id": "case-closed-3"}},
+      {"id": "activity.trace-export", "name": "Trace export lineage", "binding": {"case_id": "case-unknown-1"}},
+      {"id": "activity.query-external", "name": "Query external utility", "binding": {"case_id": "case-unknown-2"}},
+      {"id": "activity.await-owner", "name": "Await owner confirmation", "binding": {"case_id": "case-unknown-3"}},
+      {"id": "activity.counterexample-invoice", "name": "Check invoice counterexample", "binding": {"case_id": "case-refuted-1"}},
+      {"id": "activity.counterexample-policy", "name": "Check policy counterexample", "binding": {"case_id": "case-refuted-2"}},
+      {"id": "activity.counterexample-mixed", "name": "Check mixed-state counterexample", "binding": {"case_id": "case-refuted-3"}}
+    ],
+    "evidence": [
+      {"id": "evidence-closed-1-ledger", "kind": "signed_record", "description": "Signed invoice ledger confirms the amount and owner.", "source_ref": "ledger://invoice/001"},
+      {"id": "evidence-closed-2-reconcile", "kind": "reconciliation", "description": "Two independent ledger entries reconcile to the same total.", "source_ref": "ledger://reconcile/002"},
+      {"id": "evidence-closed-3-signature", "kind": "signature", "description": "The approved signer matches the recorded authorization.", "source_ref": "auth://signature/003"},
+      {"id": "evidence-unknown-1-observation", "kind": "observation", "description": "An export was observed, but its upstream lineage is not present.", "source_ref": "export://observed/004"},
+      {"id": "evidence-unknown-2-request", "kind": "request", "description": "An external lookup was requested without a returned evidence record.", "source_ref": "utility://request/005"},
+      {"id": "evidence-unknown-3-owner", "kind": "observation", "description": "The owner has not yet confirmed the causal handoff.", "source_ref": "handoff://pending/006"},
+      {"id": "evidence-refuted-1-counterexample", "kind": "counterexample", "description": "A duplicate invoice has a conflicting amount.", "source_ref": "ledger://invoice/007"},
+      {"id": "evidence-refuted-2-counterexample", "kind": "counterexample", "description": "The policy record contradicts the asserted approval window.", "source_ref": "policy://window/008"},
+      {"id": "evidence-refuted-3-counterexample", "kind": "counterexample", "description": "A source event predates the claimed authorizing event.", "source_ref": "event://ordering/009"}
+    ],
+    "cases": [
+      {
+        "id": "case-closed-1",
+        "title": "Invoice ownership is reconciled",
+        "summary": "Invoice ownership is closed; see case-closed-1 and evidence-closed-1-ledger.",
+        "summary_refs": ["case-closed-1", "evidence-closed-1-ledger"],
+        "expected_decision": "CLOSED",
+        "activity_id": "activity.collect-invoice",
+        "source_context": "Internal signed ledger snapshot.",
+        "operator_notes": "No follow-up operation is required.",
+        "audit_trace": "Evidence was accepted under ledger reconciliation policy.",
+        "claims": [
+          {"id": "claim-closed-1", "state": "CLOSED", "proof_choice": "signed-ledger", "evidence_ids": ["evidence-closed-1-ledger"]}
+        ],
+        "counterexamples": []
+      },
+      {
+        "id": "case-closed-2",
+        "title": "Ledger total is reconciled",
+        "summary": "The ledger total is closed; see case-closed-2 and evidence-closed-2-reconcile.",
+        "summary_refs": ["case-closed-2", "evidence-closed-2-reconcile"],
+        "expected_decision": "CLOSED",
+        "activity_id": "activity.reconcile-ledger",
+        "source_context": "Two-ledger reconciliation snapshot.",
+        "operator_notes": "Reconciliation is repeatable from the cited records.",
+        "audit_trace": "Both records were retained with matching totals.",
+        "claims": [
+          {"id": "claim-closed-2", "state": "CLOSED", "proof_choice": "dual-ledger-reconcile", "evidence_ids": ["evidence-closed-2-reconcile"]}
+        ],
+        "counterexamples": []
+      },
+      {
+        "id": "case-closed-3",
+        "title": "Authorization signature is verified",
+        "summary": "The authorization is closed; see case-closed-3 and evidence-closed-3-signature.",
+        "summary_refs": ["case-closed-3", "evidence-closed-3-signature"],
+        "expected_decision": "CLOSED",
+        "activity_id": "activity.verify-signature",
+        "source_context": "Authorization registry snapshot.",
+        "operator_notes": "Signer identity and authorization scope agree.",
+        "audit_trace": "The signature was compared against the approval registry.",
+        "claims": [
+          {"id": "claim-closed-3", "state": "CLOSED", "proof_choice": "registry-signature", "evidence_ids": ["evidence-closed-3-signature"]}
+        ],
+        "counterexamples": []
+      },
+      {
+        "id": "case-unknown-1",
+        "title": "Export lineage has a causal gap",
+        "summary": "The export is observed but unresolved; see case-unknown-1 and evidence-unknown-1-observation.",
+        "summary_refs": ["case-unknown-1", "evidence-unknown-1-observation"],
+        "expected_decision": "UNKNOWN",
+        "activity_id": "activity.trace-export",
+        "source_context": "Export observation without an upstream lineage record.",
+        "operator_notes": "Request the missing upstream event before closing.",
+        "audit_trace": "The observed artifact is retained while causality remains open.",
+        "claims": [
+          {"id": "claim-unknown-1", "state": "UNKNOWN", "proof_choice": "causal-frontier", "evidence_ids": ["evidence-unknown-1-observation"]}
+        ],
+        "unknown_frontier": {"stage": "lineage", "step": "locate-upstream-event", "reason": "The observed export has no source event.", "unknown_class": "missing-causal-link", "next_operation": "Request and verify the upstream event.", "blocked_by": "upstream event owner"},
+        "counterexamples": []
+      },
+      {
+        "id": "case-unknown-2",
+        "title": "External utility returned no evidence",
+        "summary": "The external lookup cannot close the claim; see case-unknown-2 and evidence-unknown-2-request.",
+        "summary_refs": ["case-unknown-2", "evidence-unknown-2-request"],
+        "expected_decision": "UNKNOWN",
+        "activity_id": "activity.query-external",
+        "source_context": "External utility request with an empty evidence response.",
+        "operator_notes": "Retry only with a traceable evidence response.",
+        "audit_trace": "No external assertion is treated as proof without a returned record.",
+        "claims": [
+          {"id": "claim-unknown-2", "state": "CLOSED", "proof_choice": "external-utility", "evidence_ids": [], "utility": {"kind": "external", "name": "evidence-lookup", "evidence_ids": []}}
+        ],
+        "unknown_frontier": {"stage": "external-utility", "step": "obtain-evidence-response", "reason": "The utility returned zero evidence.", "unknown_class": "zero-evidence-utility", "next_operation": "Obtain a traceable response or mark the claim unresolved.", "blocked_by": "external utility evidence response"},
+        "counterexamples": []
+      },
+      {
+        "id": "case-unknown-3",
+        "title": "Owner handoff is unresolved",
+        "summary": "The owner handoff is unresolved; see case-unknown-3 and evidence-unknown-3-owner.",
+        "summary_refs": ["case-unknown-3", "evidence-unknown-3-owner"],
+        "expected_decision": "UNKNOWN",
+        "activity_id": "activity.await-owner",
+        "source_context": "Pending owner confirmation.",
+        "operator_notes": "Do not infer confirmation from silence.",
+        "audit_trace": "The pending state is preserved as a causal frontier.",
+        "claims": [
+          {"id": "claim-unknown-3", "state": "UNKNOWN", "proof_choice": "owner-confirmation", "evidence_ids": ["evidence-unknown-3-owner"]}
+        ],
+        "unknown_frontier": {"stage": "handoff", "step": "confirm-owner", "reason": "The responsible owner has not confirmed receipt.", "unknown_class": "blocked-confirmation", "next_operation": "Ask the owner to confirm the handoff.", "blocked_by": "responsible owner"},
+        "counterexamples": []
+      },
+      {
+        "id": "case-refuted-1",
+        "title": "Invoice claim has a conflicting duplicate",
+        "summary": "The invoice claim is refuted; see case-refuted-1 and evidence-refuted-1-counterexample.",
+        "summary_refs": ["case-refuted-1", "evidence-refuted-1-counterexample"],
+        "expected_decision": "REFUTED",
+        "activity_id": "activity.counterexample-invoice",
+        "source_context": "Duplicate invoice comparison.",
+        "operator_notes": "Escalate the conflicting amount for correction.",
+        "audit_trace": "The counterexample directly contradicts the asserted amount.",
+        "claims": [
+          {"id": "claim-refuted-1", "state": "REFUTED", "proof_choice": "conflicting-duplicate", "evidence_ids": ["evidence-refuted-1-counterexample"]}
+        ],
+        "counterexamples": [
+          {"id": "counterexample-refuted-1", "claim_id": "claim-refuted-1", "description": "The duplicate invoice records a conflicting amount.", "evidence_ids": ["evidence-refuted-1-counterexample"]}
+        ]
+      },
+      {
+        "id": "case-refuted-2",
+        "title": "Approval window is contradicted by policy",
+        "summary": "The approval claim is refuted; see case-refuted-2 and evidence-refuted-2-counterexample.",
+        "summary_refs": ["case-refuted-2", "evidence-refuted-2-counterexample"],
+        "expected_decision": "REFUTED",
+        "activity_id": "activity.counterexample-policy",
+        "source_context": "Policy window comparison.",
+        "operator_notes": "Invalidate the asserted approval window.",
+        "audit_trace": "The policy record is authoritative for the relevant period.",
+        "claims": [
+          {"id": "claim-refuted-2", "state": "REFUTED", "proof_choice": "policy-counterexample", "evidence_ids": ["evidence-refuted-2-counterexample"]}
+        ],
+        "counterexamples": [
+          {"id": "counterexample-refuted-2", "claim_id": "claim-refuted-2", "description": "The policy record contradicts the claimed approval window.", "evidence_ids": ["evidence-refuted-2-counterexample"]}
+        ]
+      },
+      {
+        "id": "case-refuted-3",
+        "title": "Mixed claim set is dominated by a counterexample",
+        "summary": "The mixed claim set is refuted while its unresolved frontier remains visible; see case-refuted-3 and evidence-refuted-3-counterexample.",
+        "summary_refs": ["case-refuted-3", "evidence-refuted-3-counterexample"],
+        "expected_decision": "REFUTED",
+        "activity_id": "activity.counterexample-mixed",
+        "source_context": "Mixed evidence set containing closed, unknown, and refuted claims.",
+        "operator_notes": "Resolve the counterexample before considering the other claims.",
+        "audit_trace": "Decision ordering is exercised without deleting the UNKNOWN frontier.",
+        "claims": [
+          {"id": "claim-refuted-3-refuted", "state": "REFUTED", "proof_choice": "event-order-counterexample", "evidence_ids": ["evidence-refuted-3-counterexample"]},
+          {"id": "claim-refuted-3-unknown", "state": "UNKNOWN", "proof_choice": "causal-frontier", "evidence_ids": ["evidence-unknown-3-owner"]},
+          {"id": "claim-refuted-3-closed", "state": "CLOSED", "proof_choice": "signed-record", "evidence_ids": ["evidence-closed-1-ledger"]}
+        ],
+        "unknown_frontier": {"stage": "mixed-claims", "step": "confirm-owner", "reason": "One supporting claim still lacks a causal handoff.", "unknown_class": "partial-causal-gap", "next_operation": "Preserve the frontier while investigating the counterexample.", "blocked_by": "responsible owner"},
+        "counterexamples": [
+          {"id": "counterexample-refuted-3", "claim_id": "claim-refuted-3-refuted", "description": "The source event predates the claimed authorizing event.", "evidence_ids": ["evidence-refuted-3-counterexample"]}
+        ]
+      }
+    ]
+  }
+}

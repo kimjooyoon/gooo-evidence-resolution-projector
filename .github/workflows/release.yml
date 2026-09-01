@@ -1,0 +1,91 @@
+name: immutable-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing annotated release tag to publish'
+        required: true
+        default: v0.1.0
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: draft-upload-publish
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ inputs.tag }}
+    steps:
+      - name: Checkout exact annotated tag
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.tag }}
+          token: ${{ github.token }}
+          fetch-depth: 0
+      - name: Set up Go 1.27
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.27.x'
+          cache: true
+      - name: Verify annotated tag and post-main CI
+        run: |
+          test "$(git cat-file -t "$TAG")" = tag
+          TARGET=$(git rev-list -n 1 "$TAG")
+          MAIN_SHA=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')
+          test "$TARGET" = "$MAIN_SHA"
+          CI_OK=$(gh run list --workflow ci.yml --commit "$TARGET" --json status,conclusion --jq '[.[] | select(.status == "completed" and .conclusion == "success")] | length')
+          test "$CI_OK" -ge 1
+          echo "TARGET=$TARGET" >> "$GITHUB_ENV"
+      - name: Generate and validate release outputs
+        run: |
+          go run ./cmd/projector --check --out outputs
+          ./scripts/validate-output.sh outputs
+      - name: Create draft release
+        run: |
+          test "$(gh release view "$TAG" --json id --jq .id 2>/dev/null || true)" = ""
+          mkdir -p .ci
+          gh api --method POST "repos/$GITHUB_REPOSITORY/releases" \
+            -f tag_name="$TAG" \
+            -f target_commitish="$TARGET" \
+            -f name="$TAG" \
+            -f body='Immutable release for the canonical Gooo evidence-resolution graph.' \
+            -F draft=true \
+            -F prerelease=false > .ci/draft-release.json
+          echo "RELEASE_ID=$(jq -r .id .ci/draft-release.json)" >> "$GITHUB_ENV"
+      - name: Upload all seven assets to the draft
+        run: |
+          for asset in outputs/*; do
+            name=$(basename "$asset")
+            gh api --method POST "uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=$name" \
+              -H 'Accept: application/vnd.github+json' \
+              -H 'Content-Type: application/octet-stream' \
+              --input "$asset" >/dev/null
+          done
+      - name: Verify draft asset size and digest
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" > .ci/draft-with-assets.json
+          ./scripts/verify-release-assets.sh .ci/draft-with-assets.json outputs
+      - name: Publish draft release
+        run: |
+          gh api --method PATCH "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" \
+            -F draft=false > .ci/public-release.json
+      - name: Verify public immutable release, exact tag target, size, and digest
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" > .ci/public-release.json
+          ./scripts/verify-public-release.sh "$GITHUB_REPOSITORY" "$TAG" "$TARGET" .ci/public-release.json
+          ./scripts/verify-release-assets.sh .ci/public-release.json outputs
+      - name: Upload release verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-verification-${{ github.run_id }}
+          path: |
+            .ci/draft-release.json
+            .ci/draft-with-assets.json
+            .ci/public-release.json
+          if-no-files-found: warn
+
