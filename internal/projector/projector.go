@@ -372,8 +372,8 @@ func Project(document model.SourceDocument, sourceBytes []byte) (Result, error) 
 		Evidence:                append([]model.Evidence(nil), document.Graph.Evidence...),
 		CanonicalNodes:          append([]model.CanonicalNode(nil), semanticIR.Nodes...),
 		CanonicalEdges:          append([]model.CanonicalEdge(nil), semanticIR.Edges...),
-		CanonicalSpec:           document.Graph.Canonical,
-		AuthorityBoundary:       document.Graph.Canonical.AuthorityBoundary,
+		CanonicalSpec:           document.Graph.Projection.Canonical,
+		AuthorityBoundary:       document.Graph.Projection.Canonical.AuthorityBoundary,
 		ProofCells:              append([]model.ProofCell(nil), document.Graph.Projection.ProofCells...),
 		Cases:                   cases,
 	}
@@ -434,7 +434,7 @@ func Project(document model.SourceDocument, sourceBytes []byte) (Result, error) 
 		SemanticIRSchema:       ir.SchemaVersion,
 		ExpansionEvaluations:   expansions,
 		ProofCells:             append([]model.ProofCell(nil), document.Graph.Projection.ProofCells...),
-		AuthorityBoundary:      document.Graph.Canonical.AuthorityBoundary,
+		AuthorityBoundary:      document.Graph.Projection.Canonical.AuthorityBoundary,
 	}
 	manifestBytes, err := jsonBytes(manifest)
 	if err != nil {
@@ -949,7 +949,7 @@ func evaluateCase(graph model.Graph, sourceCase model.Case, evidenceByID map[str
 		OperatorNotes:              sourceCase.OperatorNotes,
 		AuditTrace:                 sourceCase.AuditTrace,
 		ImmutableIdentity:          sourceCase.ID,
-		AuthorityBoundary:          graph.Canonical.AuthorityBoundary,
+		AuthorityBoundary:          graph.Projection.Canonical.AuthorityBoundary,
 		ClaimEdgeIDs:               claimEdgeIDs,
 		EvidenceEdgeIDs:            evidenceEdgeIDs,
 		CounterexampleEdgeIDs:      counterexampleEdgeIDs,
@@ -1032,13 +1032,13 @@ func buildViews(graph model.Graph, output GraphOutput, semanticIR ir.Document, c
 func makeLossManifest(graph model.Graph, role model.ReaderRole, semanticIR ir.Document, canonicalGraphSHA256 string) (LossManifest, error) {
 	hiddenNodeIDs := make([]string, 0)
 	for _, node := range semanticIR.Nodes {
-		if contains(role.HiddenNodeKinds, node.Kind) && !contains(graph.Canonical.RequiredNodeKinds, node.Kind) {
+		if contains(role.HiddenNodeKinds, node.Kind) && !contains(graph.Projection.Canonical.RequiredNodeKinds, node.Kind) {
 			hiddenNodeIDs = append(hiddenNodeIDs, node.ID)
 		}
 	}
 	foldedEdgeIDs := make([]string, 0)
 	for _, edge := range semanticIR.Edges {
-		if contains(role.FoldedEdgeKinds, edge.Kind) && !contains(graph.Canonical.RequiredEdgeKinds, edge.Kind) {
+		if contains(role.FoldedEdgeKinds, edge.Kind) && !contains(graph.Projection.Canonical.RequiredEdgeKinds, edge.Kind) {
 			foldedEdgeIDs = append(foldedEdgeIDs, edge.ID)
 		}
 	}

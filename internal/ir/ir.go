@@ -21,7 +21,7 @@ type Document struct {
 
 func Lower(document model.SourceDocument) (Document, error) {
 	graph := document.Graph
-	if graph.Canonical.AuthorityBoundary == "" {
+	if graph.Projection.Canonical.AuthorityBoundary == "" {
 		return Document{}, fmt.Errorf("canonical authority boundary is required")
 	}
 
@@ -32,11 +32,11 @@ func Lower(document model.SourceDocument) (Document, error) {
 			Kind:              kind,
 			Label:             label,
 			ImmutableIdentity: true,
-			AuthorityBoundary: graph.Canonical.AuthorityBoundary,
+			AuthorityBoundary: graph.Projection.Canonical.AuthorityBoundary,
 		})
 	}
 	addNode("graph:"+graph.ID, "graph", graph.ID)
-	addNode("authority:"+graph.Canonical.AuthorityBoundary, "authority", graph.Canonical.AuthorityBoundary)
+	addNode("authority:"+graph.Projection.Canonical.AuthorityBoundary, "authority", graph.Projection.Canonical.AuthorityBoundary)
 	for _, activity := range graph.Activities {
 		addNode(activity.ID, "activity", activity.Name)
 	}
@@ -75,11 +75,11 @@ func Lower(document model.SourceDocument) (Document, error) {
 			Kind:              kind,
 			From:              from,
 			To:                to,
-			AuthorityBoundary: graph.Canonical.AuthorityBoundary,
+			AuthorityBoundary: graph.Projection.Canonical.AuthorityBoundary,
 		})
 		return nil
 	}
-	if err := addEdge("edge:graph-authority", "authority_boundary", "graph:"+graph.ID, "authority:"+graph.Canonical.AuthorityBoundary); err != nil {
+	if err := addEdge("edge:graph-authority", "authority_boundary", "graph:"+graph.ID, "authority:"+graph.Projection.Canonical.AuthorityBoundary); err != nil {
 		return Document{}, err
 	}
 	for _, activity := range graph.Activities {
@@ -136,4 +136,3 @@ func unknownNodeID(caseID string) string {
 func provenanceNodeID(sourceRef string) string {
 	return "provenance:" + strings.TrimSpace(sourceRef)
 }
-
