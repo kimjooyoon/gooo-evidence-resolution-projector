@@ -47,9 +47,9 @@ jobs:
             cat .ci/gofmt.patch
             exit 1
           fi
-      - name: Generate seven caller-owned outputs
+      - name: Generate eleven caller-owned outputs
         run: go run ./cmd/projector --check --out outputs
-      - name: Validate seven caller-owned outputs
+      - name: Validate eleven caller-owned outputs
         run: ./scripts/validate-output.sh outputs
       - name: Upload caller-owned outputs
         if: always()

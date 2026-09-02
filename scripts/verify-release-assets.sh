@@ -12,6 +12,10 @@ expected=(
   operator-view.md
   auditor-view.md
   projection-receipt.json
+  reviewer-view.md
+  language-maintainer-view.md
+  projection-dossier.md
+  projection-artifact.json
 )
 test "$(jq '.assets | length' "$release_json")" -eq 7
 for name in "${expected[@]}"; do
@@ -23,4 +27,3 @@ for name in "${expected[@]}"; do
   test "$remote_size" = "$local_size"
   test "$remote_digest" = "sha256:$local_digest"
 done
-

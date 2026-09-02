@@ -11,7 +11,7 @@ import (
 func main() {
 	source := flag.String("source", ".gooo/released.gooo", "path to the data-only Gooo source")
 	output := flag.String("out", "outputs", "caller-owned output directory")
-	check := flag.Bool("check", false, "generate and validate the seven caller-owned outputs")
+	check := flag.Bool("check", false, "generate and validate the eleven caller-owned outputs")
 	flag.Parse()
 
 	result, err := projector.LoadAndProject(*source)

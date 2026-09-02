@@ -16,11 +16,11 @@ func TestProjectionPreservesInvariantFieldsAcrossViews(t *testing.T) {
 	if len(result.Graph.Cases) != 9 {
 		t.Fatalf("cases = %d, want 9", len(result.Graph.Cases))
 	}
-	if len(result.Views) != 3 {
-		t.Fatalf("views = %d, want 3", len(result.Views))
+	if len(result.Views) != 4 {
+		t.Fatalf("views = %d, want 4", len(result.Views))
 	}
-	if len(result.Events) != 27 {
-		t.Fatalf("events = %d, want 27", len(result.Events))
+	if len(result.Events) != 36 {
+		t.Fatalf("events = %d, want 36", len(result.Events))
 	}
 	for caseIndex := range result.Graph.Cases {
 		first := result.Views[0].Cases[caseIndex]
@@ -34,6 +34,22 @@ func TestProjectionPreservesInvariantFieldsAcrossViews(t *testing.T) {
 			if first.Decision != other.Decision || first.DecisionDigest != other.DecisionDigest {
 				t.Fatalf("case %s decision changed between views", first.CaseID)
 			}
+		}
+	}
+}
+
+func TestProjectionConformancePreservesFrontiersAndLossVectors(t *testing.T) {
+	root := filepath.Join("..", "..")
+	result, err := LoadAndProject(filepath.Join(root, ".gooo", "released.gooo"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := VerifyConformance(result); err != nil {
+		t.Fatal(err)
+	}
+	for _, view := range result.Views {
+		if view.CanonicalGraphSHA256 != result.Manifest.CanonicalGraphSHA256 {
+			t.Fatalf("role %s is not digest-bound", view.Role)
 		}
 	}
 }

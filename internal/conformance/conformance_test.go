@@ -19,8 +19,11 @@ func TestReleasedGoooConformance(t *testing.T) {
 	if result.Inventory.CasesByDecision["CLOSED"] != 3 || result.Inventory.CasesByDecision["UNKNOWN"] != 3 || result.Inventory.CasesByDecision["REFUTED"] != 3 {
 		t.Fatalf("decision inventory = %#v", result.Inventory.CasesByDecision)
 	}
-	if result.Inventory.ReaderResolutions != 3 || result.Inventory.CallerOwnedOutputKinds != 7 || result.Inventory.ProjectionEvents != 27 {
+	if result.Inventory.ReaderResolutions != 4 || result.Inventory.CallerOwnedOutputKinds != 11 || result.Inventory.ProjectionEvents != 36 {
 		t.Fatalf("resolution/output/event inventory = %d/%d/%d", result.Inventory.ReaderResolutions, result.Inventory.CallerOwnedOutputKinds, result.Inventory.ProjectionEvents)
+	}
+	if err := projector.VerifyConformance(result); err != nil {
+		t.Fatal(err)
 	}
 	for _, view := range result.Views {
 		if view.OmittedFieldCount != len(view.OmittedFieldIDs) {

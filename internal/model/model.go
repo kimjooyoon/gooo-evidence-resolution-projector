@@ -23,6 +23,11 @@ type Projection struct {
 	Fields        []ProjectionField `json:"fields"`
 	Groups        []ProjectionGroup `json:"groups"`
 	Views         []ViewSpec        `json:"views"`
+	ReaderRoles   []ReaderRole      `json:"reader_roles"`
+	LossPolicy    LossPolicy        `json:"loss_policy"`
+	Canonical     CanonicalSpec     `json:"canonical"`
+	Expansion     ExpansionRules    `json:"expansion"`
+	ProofCells    []ProofCell       `json:"proof_cells"`
 }
 
 type SemanticRules struct {
@@ -50,6 +55,68 @@ type ViewSpec struct {
 	ID    string   `json:"id"`
 	Label string   `json:"label"`
 	Omits []string `json:"omits"`
+}
+
+// ReaderRole is an append-only role/resolution contract layered on the
+// original v0.1 views. It declares what may be hidden, folded, or lost.
+type ReaderRole struct {
+	ID                  string   `json:"id"`
+	Label               string   `json:"label"`
+	RequestedResolution string   `json:"requested_resolution"`
+	MandatoryFields     []string `json:"mandatory_fields"`
+	HiddenNodeKinds     []string `json:"hidden_node_kinds"`
+	FoldedEdgeKinds     []string `json:"folded_edge_kinds"`
+	LostFields          []string `json:"lost_fields"`
+}
+
+type LossPolicy struct {
+	AllowedLostFields      map[string][]string `json:"allowed_lost_fields"`
+	AllowedHiddenNodeKinds map[string][]string `json:"allowed_hidden_node_kinds"`
+	AllowedFoldedEdgeKinds map[string][]string `json:"allowed_folded_edge_kinds"`
+	NeverLoseFields        []string            `json:"never_lose_fields"`
+	NeverHideNodeKinds     []string            `json:"never_hide_node_kinds"`
+	NeverFoldEdgeKinds     []string            `json:"never_fold_edge_kinds"`
+	MissingInputDecision   string              `json:"missing_input_decision"`
+}
+
+type CanonicalSpec struct {
+	NodeKinds         []string `json:"node_kinds"`
+	EdgeKinds         []string `json:"edge_kinds"`
+	RequiredNodeKinds []string `json:"required_node_kinds"`
+	RequiredEdgeKinds []string `json:"required_edge_kinds"`
+	ImmutableIdentity string   `json:"immutable_identity"`
+	AuthorityBoundary string   `json:"authority_boundary"`
+}
+
+type ExpansionRules struct {
+	MissingInputDecision     string          `json:"missing_input_decision"`
+	RestoredHiddenDecision   string          `json:"restored_hidden_decision"`
+	RefutingCounterexampleID string          `json:"refuting_counterexample_id"`
+	MissingInputFrontier     UnknownFrontier `json:"missing_input_frontier"`
+}
+
+type ProofCell struct {
+	ID          string `json:"id"`
+	CaseID      string `json:"case_id"`
+	ActivityID  string `json:"activity_id"`
+	ProofChoice string `json:"proof_choice"`
+	Indicator   string `json:"indicator"`
+}
+
+type CanonicalNode struct {
+	ID                string `json:"id"`
+	Kind              string `json:"kind"`
+	Label             string `json:"label"`
+	ImmutableIdentity bool   `json:"immutable_identity"`
+	AuthorityBoundary string `json:"authority_boundary"`
+}
+
+type CanonicalEdge struct {
+	ID                string `json:"id"`
+	Kind              string `json:"kind"`
+	From              string `json:"from"`
+	To                string `json:"to"`
+	AuthorityBoundary string `json:"authority_boundary"`
 }
 
 type Activity struct {

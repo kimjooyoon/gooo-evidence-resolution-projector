@@ -3,9 +3,9 @@
   "language_version": "0.1",
   "graph": {
     "id": "gooo-evidence-resolution-projector",
-    "release": "v0.1.0",
+    "release": "v0.1.1",
     "projection": {
-      "schema_version": "1.0.0",
+      "schema_version": "1.1.0",
       "decision_order": ["REFUTED", "UNKNOWN", "CLOSED"],
       "semantic_rules": {
         "refuted_state": "REFUTED",
@@ -32,6 +32,13 @@
         {"id": "unknown.unknown_class", "label": "UNKNOWN class", "source": "unknown_frontier.unknown_class", "invariant": true, "allowed_omission": []},
         {"id": "unknown.next_operation", "label": "UNKNOWN next operation", "source": "unknown_frontier.next_operation", "invariant": true, "allowed_omission": []},
         {"id": "unknown.blocked_by", "label": "UNKNOWN blocked by", "source": "unknown_frontier.blocked_by", "invariant": true, "allowed_omission": []},
+        {"id": "immutable_identity", "label": "Immutable identity", "source": "immutable_identity", "invariant": true, "allowed_omission": []},
+        {"id": "authority_boundary", "label": "Authority boundary", "source": "authority_boundary", "invariant": true, "allowed_omission": []},
+        {"id": "claim_edge_ids", "label": "Claim edge IDs", "source": "claim_edge_ids", "invariant": true, "allowed_omission": []},
+        {"id": "evidence_edge_ids", "label": "Evidence edge IDs", "source": "evidence_edge_ids", "invariant": true, "allowed_omission": []},
+        {"id": "counterexample_edge_ids", "label": "Counterexample edge IDs", "source": "counterexample_edge_ids", "invariant": true, "allowed_omission": []},
+        {"id": "provenance_edge_ids", "label": "Provenance edge IDs", "source": "provenance_edge_ids", "invariant": true, "allowed_omission": []},
+        {"id": "proof_cells", "label": "Proof cells", "source": "proof_cells", "invariant": true, "allowed_omission": []},
         {"id": "source_context", "label": "Source context", "source": "source_context", "invariant": false, "allowed_omission": ["user", "operator"]},
         {"id": "operator_notes", "label": "Operator notes", "source": "operator_notes", "invariant": false, "allowed_omission": ["user"]},
         {"id": "audit_trace", "label": "Audit trace", "source": "audit_trace", "invariant": false, "allowed_omission": ["user", "operator"]}
@@ -43,6 +50,93 @@
         {"id": "user", "label": "User", "omits": ["source_context", "operator_notes", "audit_trace"]},
         {"id": "operator", "label": "Operator", "omits": ["source_context", "audit_trace"]},
         {"id": "auditor", "label": "Auditor", "omits": []}
+      ],
+      "reader_roles": [
+        {
+          "id": "USER",
+          "label": "User",
+          "requested_resolution": "SUMMARY",
+          "mandatory_fields": ["case_id", "title", "summary", "summary_refs", "decision", "decision_digest", "claim_state", "proof_choice", "evidence_ids", "evidence_descriptions", "counterexample_ids", "counterexample_descriptions", "unknown.stage", "unknown.step", "unknown.reason", "unknown.unknown_class", "unknown.next_operation", "unknown.blocked_by", "immutable_identity", "authority_boundary", "claim_edge_ids", "evidence_edge_ids", "counterexample_edge_ids", "provenance_edge_ids", "proof_cells"],
+          "hidden_node_kinds": ["activity", "provenance"],
+          "folded_edge_kinds": ["activity_binding", "evidence_provenance"],
+          "lost_fields": ["source_context", "operator_notes", "audit_trace"]
+        },
+        {
+          "id": "REVIEWER",
+          "label": "Reviewer",
+          "requested_resolution": "REVIEW",
+          "mandatory_fields": ["case_id", "title", "summary", "summary_refs", "decision", "decision_digest", "claim_state", "proof_choice", "evidence_ids", "evidence_descriptions", "counterexample_ids", "counterexample_descriptions", "unknown.stage", "unknown.step", "unknown.reason", "unknown.unknown_class", "unknown.next_operation", "unknown.blocked_by", "immutable_identity", "authority_boundary", "claim_edge_ids", "evidence_edge_ids", "counterexample_edge_ids", "provenance_edge_ids", "proof_cells"],
+          "hidden_node_kinds": ["provenance"],
+          "folded_edge_kinds": ["evidence_provenance"],
+          "lost_fields": ["source_context", "audit_trace"]
+        },
+        {
+          "id": "LANGUAGE_MAINTAINER",
+          "label": "Language maintainer",
+          "requested_resolution": "SEMANTIC",
+          "mandatory_fields": ["case_id", "title", "summary", "summary_refs", "decision", "decision_digest", "claim_state", "proof_choice", "evidence_ids", "evidence_descriptions", "counterexample_ids", "counterexample_descriptions", "unknown.stage", "unknown.step", "unknown.reason", "unknown.unknown_class", "unknown.next_operation", "unknown.blocked_by", "immutable_identity", "authority_boundary", "claim_edge_ids", "evidence_edge_ids", "counterexample_edge_ids", "provenance_edge_ids", "proof_cells"],
+          "hidden_node_kinds": [],
+          "folded_edge_kinds": [],
+          "lost_fields": ["operator_notes"]
+        },
+        {
+          "id": "AUDITOR",
+          "label": "Auditor",
+          "requested_resolution": "FULL",
+          "mandatory_fields": ["case_id", "title", "summary", "summary_refs", "decision", "decision_digest", "claim_state", "proof_choice", "evidence_ids", "evidence_descriptions", "counterexample_ids", "counterexample_descriptions", "unknown.stage", "unknown.step", "unknown.reason", "unknown.unknown_class", "unknown.next_operation", "unknown.blocked_by", "immutable_identity", "authority_boundary", "claim_edge_ids", "evidence_edge_ids", "counterexample_edge_ids", "provenance_edge_ids", "proof_cells"],
+          "hidden_node_kinds": [],
+          "folded_edge_kinds": [],
+          "lost_fields": []
+        }
+      ],
+      "loss_policy": {
+        "allowed_lost_fields": {
+          "USER": ["source_context", "operator_notes", "audit_trace"],
+          "REVIEWER": ["source_context", "audit_trace"],
+          "LANGUAGE_MAINTAINER": ["operator_notes"],
+          "AUDITOR": []
+        },
+        "allowed_hidden_node_kinds": {
+          "USER": ["activity", "provenance"],
+          "REVIEWER": ["provenance"],
+          "LANGUAGE_MAINTAINER": [],
+          "AUDITOR": []
+        },
+        "allowed_folded_edge_kinds": {
+          "USER": ["activity_binding", "evidence_provenance"],
+          "REVIEWER": ["evidence_provenance"],
+          "LANGUAGE_MAINTAINER": [],
+          "AUDITOR": []
+        },
+        "never_lose_fields": ["decision", "unknown.stage", "unknown.step", "unknown.reason", "unknown.unknown_class", "unknown.next_operation", "unknown.blocked_by", "counterexample_ids", "immutable_identity", "authority_boundary"],
+        "never_hide_node_kinds": ["graph", "authority", "case", "claim", "evidence", "counterexample", "unknown_frontier"],
+        "never_fold_edge_kinds": ["authority_boundary", "claim_counterexample", "counterexample_evidence", "claim_unknown_frontier"],
+        "missing_input_decision": "UNKNOWN"
+      },
+      "canonical": {
+        "node_kinds": ["graph", "authority", "activity", "case", "claim", "evidence", "counterexample", "unknown_frontier", "provenance"],
+        "edge_kinds": ["authority_boundary", "activity_binding", "case_claim", "claim_evidence", "claim_counterexample", "counterexample_evidence", "claim_unknown_frontier", "evidence_provenance"],
+        "required_node_kinds": ["graph", "authority", "case", "claim", "evidence", "counterexample", "unknown_frontier"],
+        "required_edge_kinds": ["authority_boundary", "claim_counterexample", "counterexample_evidence", "claim_unknown_frontier"],
+        "immutable_identity": "stable canonical node ID",
+        "authority_boundary": "released-gooo-read-only"
+      },
+      "expansion": {
+        "missing_input_decision": "UNKNOWN",
+        "restored_hidden_decision": "REFUTED",
+        "refuting_counterexample_id": "counterexample-refuted-3",
+        "missing_input_frontier": {"stage": "expansion", "step": "bind-original-role-loss-policy", "reason": "The original graph, reader role, or loss policy is unavailable.", "unknown_class": "missing-expansion-input", "next_operation": "Supply the exact original graph, role, and loss policy before expanding.", "blocked_by": "original graph, reader role, or loss policy"}
+      },
+      "proof_cells": [
+        {"id": "cell-closed-1", "case_id": "case-closed-1", "activity_id": "activity.collect-invoice", "proof_choice": "FOUNDATION", "indicator": "DRIVER"},
+        {"id": "cell-closed-2", "case_id": "case-closed-2", "activity_id": "activity.reconcile-ledger", "proof_choice": "COHERENCE", "indicator": "OUTCOME"},
+        {"id": "cell-closed-3", "case_id": "case-closed-3", "activity_id": "activity.verify-signature", "proof_choice": "REGRESSION", "indicator": "GUARDRAIL"},
+        {"id": "cell-unknown-1", "case_id": "case-unknown-1", "activity_id": "activity.trace-export", "proof_choice": "FOUNDATION", "indicator": "DRIVER"},
+        {"id": "cell-unknown-2", "case_id": "case-unknown-2", "activity_id": "activity.query-external", "proof_choice": "COHERENCE", "indicator": "OUTCOME"},
+        {"id": "cell-unknown-3", "case_id": "case-unknown-3", "activity_id": "activity.await-owner", "proof_choice": "REGRESSION", "indicator": "GUARDRAIL"},
+        {"id": "cell-refuted-1", "case_id": "case-refuted-1", "activity_id": "activity.counterexample-invoice", "proof_choice": "FOUNDATION", "indicator": "DRIVER"},
+        {"id": "cell-refuted-2", "case_id": "case-refuted-2", "activity_id": "activity.counterexample-policy", "proof_choice": "COHERENCE", "indicator": "OUTCOME"},
+        {"id": "cell-refuted-3", "case_id": "case-refuted-3", "activity_id": "activity.counterexample-mixed", "proof_choice": "REGRESSION", "indicator": "GUARDRAIL"}
       ]
     },
     "activities": [
