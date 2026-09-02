@@ -20,7 +20,7 @@ for name in "${expected[@]}"; do
   test -f "$output_dir/$name"
 done
 actual_count=$(find "$output_dir" -maxdepth 1 -type f -print | wc -l | tr -d ' ')
-test "$actual_count" -eq 7
+test "$actual_count" -eq 11
 
 jq -e . "$output_dir/projection-manifest.json" >/dev/null
 jq -e . "$output_dir/evidence-graph.json" >/dev/null
