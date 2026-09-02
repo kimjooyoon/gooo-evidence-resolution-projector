@@ -6,7 +6,7 @@ on:
       tag:
         description: 'Existing annotated release tag to publish'
         required: true
-        default: v0.1.1
+        default: v0.1.2
         type: string
 
 permissions:
@@ -62,7 +62,7 @@ jobs:
               -F prerelease=false > .ci/draft-release.json
           fi
           echo "RELEASE_ID=$(jq -r .id .ci/draft-release.json)" >> "$GITHUB_ENV"
-      - name: Upload all seven assets to the draft
+      - name: Upload all eleven assets to the draft
         run: |
           gh api "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" > .ci/draft-before-assets.json
           for existing in $(jq -r '.assets[].name' .ci/draft-before-assets.json); do

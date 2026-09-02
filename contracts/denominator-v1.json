@@ -14,8 +14,14 @@
     "reader_resolutions": 3,
     "caller_owned_output_kinds": 7
   },
-  "current_contract": {
+  "burned_intermediate_release": {
     "release": "v0.1.1",
+    "status": "OPERATIONAL_REFUTED",
+    "reason_code": "DRAFT_ASSET_AUDIT_FAILED",
+    "replacement_policy": "never_edit_delete_or_reuse"
+  },
+  "current_contract": {
+    "release": "v0.1.2",
     "case_denominator_minimum": 9,
     "cases_by_decision": {
       "CLOSED": 3,
