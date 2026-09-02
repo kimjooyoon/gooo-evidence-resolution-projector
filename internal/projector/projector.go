@@ -16,14 +16,14 @@ import (
 )
 
 const (
-	OutputManifest = "projection-manifest.json"
-	OutputGraph    = "evidence-graph.json"
-	OutputEvents   = "projection-events.ndjson"
-	OutputUser     = "user-view.md"
-	OutputOperator = "operator-view.md"
-	OutputAuditor  = "auditor-view.md"
-	OutputReceipt  = "projection-receipt.json"
-	OutputReviewer = "reviewer-view.md"
+	OutputManifest           = "projection-manifest.json"
+	OutputGraph              = "evidence-graph.json"
+	OutputEvents             = "projection-events.ndjson"
+	OutputUser               = "user-view.md"
+	OutputOperator           = "operator-view.md"
+	OutputAuditor            = "auditor-view.md"
+	OutputReceipt            = "projection-receipt.json"
+	OutputReviewer           = "reviewer-view.md"
 	OutputLanguageMaintainer = "language-maintainer-view.md"
 	OutputDossier  = "projection-dossier.md"
 	OutputArtifact = "projection-artifact.json"
@@ -44,19 +44,19 @@ var OutputNames = []string{
 }
 
 type GraphOutput struct {
-	GraphID                 string           `json:"graph_id"`
-	Release                 string           `json:"release"`
-	ProjectionSchemaVersion string           `json:"projection_schema_version"`
-	DecisionOrder           []string         `json:"decision_order"`
-	DecisionDigest          string           `json:"decision_digest"`
-	Activities              []model.Activity `json:"activities"`
-	Evidence                []model.Evidence `json:"evidence"`
+	GraphID                 string                `json:"graph_id"`
+	Release                 string                `json:"release"`
+	ProjectionSchemaVersion string                `json:"projection_schema_version"`
+	DecisionOrder           []string              `json:"decision_order"`
+	DecisionDigest          string                `json:"decision_digest"`
+	Activities              []model.Activity      `json:"activities"`
+	Evidence                []model.Evidence      `json:"evidence"`
 	CanonicalNodes          []model.CanonicalNode `json:"canonical_nodes"`
 	CanonicalEdges          []model.CanonicalEdge `json:"canonical_edges"`
-	CanonicalSpec            model.CanonicalSpec `json:"canonical_spec"`
-	AuthorityBoundary       string           `json:"authority_boundary"`
-	ProofCells              []model.ProofCell `json:"proof_cells"`
-	Cases                   []CaseOutput     `json:"cases"`
+	CanonicalSpec           model.CanonicalSpec   `json:"canonical_spec"`
+	AuthorityBoundary       string                `json:"authority_boundary"`
+	ProofCells              []model.ProofCell     `json:"proof_cells"`
+	Cases                   []CaseOutput          `json:"cases"`
 }
 
 type CaseOutput struct {
@@ -87,7 +87,7 @@ type CaseOutput struct {
 	EvidenceEdgeIDs            []string                    `json:"evidence_edge_ids"`
 	CounterexampleEdgeIDs      []string                    `json:"counterexample_edge_ids"`
 	ProvenanceEdgeIDs          []string                    `json:"provenance_edge_ids"`
-	ProofCells                 []model.ProofCell          `json:"proof_cells"`
+	ProofCells                 []model.ProofCell           `json:"proof_cells"`
 }
 
 type ClaimState struct {
@@ -179,17 +179,17 @@ type ProjectionEvent struct {
 }
 
 type Inventory struct {
-	GoooActivities         int            `json:"gooo_activities"`
-	CanonicalCases         int            `json:"canonical_cases"`
-	CasesByDecision        map[string]int `json:"cases_by_decision"`
-	ReaderResolutions      int            `json:"reader_resolutions"`
-	CallerOwnedOutputKinds int            `json:"caller_owned_output_kinds"`
-	ProjectionEvents       int            `json:"projection_events"`
-	RepositoryWrites       int            `json:"repository_writes"`
-	InputRepoMutations     int            `json:"input_repo_mutations"`
-	SourceMutations        int            `json:"source_mutations"`
-	CrossProjectRequiredGates int         `json:"cross_project_required_gates"`
-	RuntimeSideEffects     int            `json:"runtime_side_effects"`
+	GoooActivities            int            `json:"gooo_activities"`
+	CanonicalCases            int            `json:"canonical_cases"`
+	CasesByDecision           map[string]int `json:"cases_by_decision"`
+	ReaderResolutions         int            `json:"reader_resolutions"`
+	CallerOwnedOutputKinds    int            `json:"caller_owned_output_kinds"`
+	ProjectionEvents          int            `json:"projection_events"`
+	RepositoryWrites          int            `json:"repository_writes"`
+	InputRepoMutations        int            `json:"input_repo_mutations"`
+	SourceMutations           int            `json:"source_mutations"`
+	CrossProjectRequiredGates int            `json:"cross_project_required_gates"`
+	RuntimeSideEffects        int            `json:"runtime_side_effects"`
 }
 
 type ViewManifest struct {
@@ -208,21 +208,21 @@ type ViewManifest struct {
 }
 
 type Manifest struct {
-	ManifestVersion        string         `json:"manifest_version"`
-	GraphID                string         `json:"graph_id"`
-	Release                string         `json:"release"`
-	GoooSource             string         `json:"gooo_source"`
-	GoooSourceSHA256       string         `json:"gooo_source_sha256"`
-	CanonicalGraphSHA256   string         `json:"canonical_graph_sha256"`
-	DecisionDigest         string         `json:"decision_digest"`
-	DecisionOrder          []string       `json:"decision_order"`
-	Inventory              Inventory      `json:"inventory"`
-	CallerOwnedOutputKinds []string       `json:"caller_owned_output_kinds"`
-	Views                  []ViewManifest `json:"views"`
-	SemanticIRSchema        string         `json:"semantic_ir_schema"`
-	ExpansionEvaluations    []ExpansionEvaluation `json:"expansion_evaluations"`
-	ProofCells              []model.ProofCell `json:"proof_cells"`
-	AuthorityBoundary       string         `json:"authority_boundary"`
+	ManifestVersion        string                `json:"manifest_version"`
+	GraphID                string                `json:"graph_id"`
+	Release                string                `json:"release"`
+	GoooSource             string                `json:"gooo_source"`
+	GoooSourceSHA256       string                `json:"gooo_source_sha256"`
+	CanonicalGraphSHA256   string                `json:"canonical_graph_sha256"`
+	DecisionDigest         string                `json:"decision_digest"`
+	DecisionOrder          []string              `json:"decision_order"`
+	Inventory              Inventory             `json:"inventory"`
+	CallerOwnedOutputKinds []string              `json:"caller_owned_output_kinds"`
+	Views                  []ViewManifest        `json:"views"`
+	SemanticIRSchema       string                `json:"semantic_ir_schema"`
+	ExpansionEvaluations   []ExpansionEvaluation `json:"expansion_evaluations"`
+	ProofCells             []model.ProofCell     `json:"proof_cells"`
+	AuthorityBoundary      string                `json:"authority_boundary"`
 }
 
 type ReceiptFile struct {
@@ -258,33 +258,33 @@ type Result struct {
 }
 
 type ExpansionRequest struct {
-	Role                  string
-	RequestedResolution   string
+	Role                   string
+	RequestedResolution    string
 	OriginalGraphAvailable bool
-	RoleAvailable         bool
-	LossPolicyAvailable   bool
-	RestoredFieldIDs      []string
+	RoleAvailable          bool
+	LossPolicyAvailable    bool
+	RestoredFieldIDs       []string
 }
 
 type ExpansionEvaluation struct {
-	ID                    string                 `json:"id"`
-	Role                  string                 `json:"role"`
-	Decision              string                 `json:"decision"`
-	Reason                string                 `json:"reason"`
-	UnknownFrontier       *model.UnknownFrontier `json:"unknown_frontier"`
-	RefutingCounterexampleID string              `json:"refuting_counterexample_id"`
+	ID                       string                 `json:"id"`
+	Role                     string                 `json:"role"`
+	Decision                 string                 `json:"decision"`
+	Reason                   string                 `json:"reason"`
+	UnknownFrontier          *model.UnknownFrontier `json:"unknown_frontier"`
+	RefutingCounterexampleID string                 `json:"refuting_counterexample_id"`
 }
 
 type ProjectionArtifact struct {
-	ArtifactVersion       string                 `json:"artifact_version"`
-	Graph                 GraphOutput            `json:"graph"`
-	SemanticIRSchema      string                 `json:"semantic_ir_schema"`
-	SemanticIR            SemanticIRArtifact     `json:"semantic_ir"`
-	CanonicalGraphSHA256  string                 `json:"canonical_graph_sha256"`
-	Projections           []ViewProjection       `json:"projections"`
-	ExpansionEvaluations  []ExpansionEvaluation  `json:"expansion_evaluations"`
-	ProofCells            []model.ProofCell      `json:"proof_cells"`
-	Runtime               RuntimeBoundary        `json:"runtime"`
+	ArtifactVersion      string                `json:"artifact_version"`
+	Graph                GraphOutput           `json:"graph"`
+	SemanticIRSchema     string                `json:"semantic_ir_schema"`
+	SemanticIR           SemanticIRArtifact    `json:"semantic_ir"`
+	CanonicalGraphSHA256 string                `json:"canonical_graph_sha256"`
+	Projections          []ViewProjection      `json:"projections"`
+	ExpansionEvaluations []ExpansionEvaluation `json:"expansion_evaluations"`
+	ProofCells           []model.ProofCell     `json:"proof_cells"`
+	Runtime              RuntimeBoundary       `json:"runtime"`
 }
 
 type SemanticIRArtifact struct {
@@ -298,11 +298,11 @@ type SemanticIRArtifact struct {
 }
 
 type RuntimeBoundary struct {
-	RepositoryWrites       int    `json:"repository_writes"`
-	SourceMutations        int    `json:"source_mutations"`
-	CrossProjectRequiredGates int  `json:"cross_project_required_gates"`
-	OutputScope            string `json:"output_scope"`
-	Authority              string `json:"authority"`
+	RepositoryWrites          int    `json:"repository_writes"`
+	SourceMutations           int    `json:"source_mutations"`
+	CrossProjectRequiredGates int    `json:"cross_project_required_gates"`
+	OutputScope               string `json:"output_scope"`
+	Authority                 string `json:"authority"`
 }
 
 func LoadAndProject(sourcePath string) (Result, error) {
@@ -390,17 +390,17 @@ func Project(document model.SourceDocument, sourceBytes []byte) (Result, error) 
 	expansions := buildExpansionEvaluations(document.Graph.Projection)
 
 	inventory := Inventory{
-		GoooActivities:         len(document.Graph.Activities),
-		CanonicalCases:         len(cases),
-		CasesByDecision:        counts,
-		ReaderResolutions:      len(document.Graph.Projection.ReaderRoles),
-		CallerOwnedOutputKinds: len(OutputNames),
-		ProjectionEvents:       len(events),
-		RepositoryWrites:      0,
-		InputRepoMutations:     0,
-		SourceMutations:        0,
+		GoooActivities:            len(document.Graph.Activities),
+		CanonicalCases:            len(cases),
+		CasesByDecision:           counts,
+		ReaderResolutions:         len(document.Graph.Projection.ReaderRoles),
+		CallerOwnedOutputKinds:    len(OutputNames),
+		ProjectionEvents:          len(events),
+		RepositoryWrites:          0,
+		InputRepoMutations:        0,
+		SourceMutations:           0,
 		CrossProjectRequiredGates: 0,
-		RuntimeSideEffects:     0,
+		RuntimeSideEffects:        0,
 	}
 
 	eventsBytes, err := encodeEvents(events)
@@ -442,9 +442,9 @@ func Project(document model.SourceDocument, sourceBytes []byte) (Result, error) 
 	}
 
 	contents := map[string][]byte{
-		OutputManifest: manifestBytes,
-		OutputGraph:    graphBytes,
-		OutputEvents:   eventsBytes,
+		OutputManifest:           manifestBytes,
+		OutputGraph:              graphBytes,
+		OutputEvents:             eventsBytes,
 		OutputUser:              viewBytes[OutputUser],
 		OutputOperator:          viewBytes[OutputOperator],
 		OutputAuditor:           viewBytes[OutputAuditor],
@@ -457,9 +457,9 @@ func Project(document model.SourceDocument, sourceBytes []byte) (Result, error) 
 	}
 	contents[OutputDossier] = dossier
 	artifact, err := jsonBytes(ProjectionArtifact{
-		ArtifactVersion:      "1.1.0",
-		Graph:                graph,
-		SemanticIRSchema:     ir.SchemaVersion,
+		ArtifactVersion:  "1.1.0",
+		Graph:            graph,
+		SemanticIRSchema: ir.SchemaVersion,
 		SemanticIR: SemanticIRArtifact{
 			SchemaVersion:      ir.SchemaVersion,
 			SourceGraphID:      document.Graph.ID,
@@ -475,10 +475,10 @@ func Project(document model.SourceDocument, sourceBytes []byte) (Result, error) 
 		ProofCells:           append([]model.ProofCell(nil), document.Graph.Projection.ProofCells...),
 		Runtime: RuntimeBoundary{
 			RepositoryWrites:          0,
-			SourceMutations:            0,
-			CrossProjectRequiredGates:  0,
-			OutputScope:                "CALLER_OWNED_OUTPUT_ONLY",
-			Authority:                  "GITHUB_ACTIONS",
+			SourceMutations:           0,
+			CrossProjectRequiredGates: 0,
+			OutputScope:               "CALLER_OWNED_OUTPUT_ONLY",
+			Authority:                 "GITHUB_ACTIONS",
 		},
 	})
 	if err != nil {
@@ -980,7 +980,7 @@ func buildViews(graph model.Graph, output GraphOutput, semanticIR ir.Document, c
 			OmittedFieldIDs:      append([]string(nil), loss.LostFieldIDs...),
 			OmittedFieldCount:    loss.LostFields,
 			Loss:                 loss,
-			Cases:             make([]CaseProjection, 0, len(output.Cases)),
+			Cases:                make([]CaseProjection, 0, len(output.Cases)),
 		}
 		for _, item := range output.Cases {
 			fields, err := projectFieldsForRole(graph.Projection.Fields, role, item)
@@ -1003,24 +1003,24 @@ func buildViews(graph model.Graph, output GraphOutput, semanticIR ir.Document, c
 			}
 			projection.Cases = append(projection.Cases, caseProjection)
 			events = append(events, ProjectionEvent{
-				Sequence:          sequence,
-				EventType:         "projection",
-				GraphID:           output.GraphID,
-				Role:              role.ID,
-				RequestedResolution: role.RequestedResolution,
+				Sequence:             sequence,
+				EventType:            "projection",
+				GraphID:              output.GraphID,
+				Role:                 role.ID,
+				RequestedResolution:  role.RequestedResolution,
 				CanonicalGraphSHA256: canonicalGraphSHA256,
-				View:              strings.ToLower(role.ID),
-				CaseID:            item.ID,
-				Decision:          item.Decision,
-				DecisionDigest:    output.DecisionDigest,
-				Fields:            fields,
-				OmittedFieldIDs:   append([]string(nil), loss.LostFieldIDs...),
-				OmittedFieldCount: loss.LostFields,
-				VisibleNodes:      loss.VisibleNodes,
-				HiddenNodes:       loss.HiddenNodes,
-				FoldedEdges:       loss.FoldedEdges,
-				LostFields:        loss.LostFields,
-				Loss:              loss,
+				View:                 strings.ToLower(role.ID),
+				CaseID:               item.ID,
+				Decision:             item.Decision,
+				DecisionDigest:       output.DecisionDigest,
+				Fields:               fields,
+				OmittedFieldIDs:      append([]string(nil), loss.LostFieldIDs...),
+				OmittedFieldCount:    loss.LostFields,
+				VisibleNodes:         loss.VisibleNodes,
+				HiddenNodes:          loss.HiddenNodes,
+				FoldedEdges:          loss.FoldedEdges,
+				LostFields:           loss.LostFields,
+				Loss:                 loss,
 			})
 			sequence++
 		}
@@ -1139,9 +1139,9 @@ func EvaluateExpansion(projection model.Projection, request ExpansionRequest) Ex
 	}
 	if len(request.RestoredFieldIDs) > 0 {
 		return ExpansionEvaluation{
-			Role:                      request.Role,
-			Decision:                  projection.Expansion.RestoredHiddenDecision,
-			Reason:                    "re-expansion cannot restore hidden facts as canonical authority",
+			Role:                     request.Role,
+			Decision:                 projection.Expansion.RestoredHiddenDecision,
+			Reason:                   "re-expansion cannot restore hidden facts as canonical authority",
 			RefutingCounterexampleID: projection.Expansion.RefutingCounterexampleID,
 		}
 	}
@@ -1398,40 +1398,40 @@ func rankByDecision(order []string) map[string]int {
 
 func computeDecisionDigest(cases []CaseOutput) (string, error) {
 	type material struct {
-		ID              string                      `json:"id"`
-		Decision        string                      `json:"decision"`
-		DecisionRank    int                         `json:"decision_rank"`
-		ClaimStates     []ClaimState                `json:"claim_states"`
-		ProofChoices    []ProofChoice               `json:"proof_choices"`
-		ProofCells      []model.ProofCell           `json:"proof_cells"`
-		EvidenceIDs     []string                    `json:"evidence_ids"`
-		ClaimEdgeIDs    []string                    `json:"claim_edge_ids"`
-		EvidenceEdgeIDs []string                    `json:"evidence_edge_ids"`
-		CounterexampleEdgeIDs []string              `json:"counterexample_edge_ids"`
-		ProvenanceEdgeIDs []string                  `json:"provenance_edge_ids"`
-		ImmutableIdentity string                    `json:"immutable_identity"`
-		AuthorityBoundary string                    `json:"authority_boundary"`
-		Counterexamples []CounterexampleDescription `json:"counterexamples"`
-		UnknownFrontier *model.UnknownFrontier      `json:"unknown_frontier"`
+		ID                    string                      `json:"id"`
+		Decision              string                      `json:"decision"`
+		DecisionRank          int                         `json:"decision_rank"`
+		ClaimStates           []ClaimState                `json:"claim_states"`
+		ProofChoices          []ProofChoice               `json:"proof_choices"`
+		ProofCells            []model.ProofCell           `json:"proof_cells"`
+		EvidenceIDs           []string                    `json:"evidence_ids"`
+		ClaimEdgeIDs          []string                    `json:"claim_edge_ids"`
+		EvidenceEdgeIDs       []string                    `json:"evidence_edge_ids"`
+		CounterexampleEdgeIDs []string                    `json:"counterexample_edge_ids"`
+		ProvenanceEdgeIDs     []string                    `json:"provenance_edge_ids"`
+		ImmutableIdentity     string                      `json:"immutable_identity"`
+		AuthorityBoundary     string                      `json:"authority_boundary"`
+		Counterexamples       []CounterexampleDescription `json:"counterexamples"`
+		UnknownFrontier       *model.UnknownFrontier      `json:"unknown_frontier"`
 	}
 	materials := make([]material, 0, len(cases))
 	for _, item := range cases {
 		materials = append(materials, material{
-			ID:              item.ID,
-			Decision:        item.Decision,
-			DecisionRank:    item.DecisionRank,
-			ClaimStates:     item.ClaimStates,
-			ProofChoices:    item.ProofChoices,
-			ProofCells:      item.ProofCells,
-			EvidenceIDs:     item.EvidenceIDs,
-			ClaimEdgeIDs:    item.ClaimEdgeIDs,
-			EvidenceEdgeIDs: item.EvidenceEdgeIDs,
+			ID:                    item.ID,
+			Decision:              item.Decision,
+			DecisionRank:          item.DecisionRank,
+			ClaimStates:           item.ClaimStates,
+			ProofChoices:          item.ProofChoices,
+			ProofCells:            item.ProofCells,
+			EvidenceIDs:           item.EvidenceIDs,
+			ClaimEdgeIDs:          item.ClaimEdgeIDs,
+			EvidenceEdgeIDs:       item.EvidenceEdgeIDs,
 			CounterexampleEdgeIDs: item.CounterexampleEdgeIDs,
-			ProvenanceEdgeIDs: item.ProvenanceEdgeIDs,
-			ImmutableIdentity: item.ImmutableIdentity,
-			AuthorityBoundary: item.AuthorityBoundary,
-			Counterexamples: item.CounterexampleDescriptions,
-			UnknownFrontier: item.UnknownFrontier,
+			ProvenanceEdgeIDs:     item.ProvenanceEdgeIDs,
+			ImmutableIdentity:     item.ImmutableIdentity,
+			AuthorityBoundary:     item.AuthorityBoundary,
+			Counterexamples:       item.CounterexampleDescriptions,
+			UnknownFrontier:       item.UnknownFrontier,
 		})
 	}
 	data, err := json.Marshal(materials)
