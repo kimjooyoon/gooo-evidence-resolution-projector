@@ -25,8 +25,8 @@ const (
 	OutputReceipt            = "projection-receipt.json"
 	OutputReviewer           = "reviewer-view.md"
 	OutputLanguageMaintainer = "language-maintainer-view.md"
-	OutputDossier  = "projection-dossier.md"
-	OutputArtifact = "projection-artifact.json"
+	OutputDossier            = "projection-dossier.md"
+	OutputArtifact           = "projection-artifact.json"
 )
 
 var OutputNames = []string{
@@ -445,10 +445,10 @@ func Project(document model.SourceDocument, sourceBytes []byte) (Result, error) 
 		OutputManifest:           manifestBytes,
 		OutputGraph:              graphBytes,
 		OutputEvents:             eventsBytes,
-		OutputUser:              viewBytes[OutputUser],
-		OutputOperator:          viewBytes[OutputOperator],
-		OutputAuditor:           viewBytes[OutputAuditor],
-		OutputReviewer:          viewBytes[OutputReviewer],
+		OutputUser:               viewBytes[OutputUser],
+		OutputOperator:           viewBytes[OutputOperator],
+		OutputAuditor:            viewBytes[OutputAuditor],
+		OutputReviewer:           viewBytes[OutputReviewer],
 		OutputLanguageMaintainer: viewBytes[OutputLanguageMaintainer],
 	}
 	dossier, err := renderDossier(document.Graph, graph, views, expansions, canonicalGraphSHA256)
@@ -988,18 +988,18 @@ func buildViews(graph model.Graph, output GraphOutput, semanticIR ir.Document, c
 				return nil, nil, err
 			}
 			caseProjection := CaseProjection{
-				CaseID:             item.ID,
-				Decision:           item.Decision,
-				DecisionDigest:     output.DecisionDigest,
-				Fields:             fields,
-				OmittedFieldIDs:    append([]string(nil), loss.LostFieldIDs...),
-				OmittedFieldCount:  loss.LostFields,
-				VisibleNodes:       loss.VisibleNodes,
-				HiddenNodes:        loss.HiddenNodes,
-				FoldedEdges:        loss.FoldedEdges,
-				LostFields:         loss.LostFields,
-				Loss:               loss,
-				FieldOrder:         includedFieldIDsForRole(graph.Projection.Fields, role),
+				CaseID:            item.ID,
+				Decision:          item.Decision,
+				DecisionDigest:    output.DecisionDigest,
+				Fields:            fields,
+				OmittedFieldIDs:   append([]string(nil), loss.LostFieldIDs...),
+				OmittedFieldCount: loss.LostFields,
+				VisibleNodes:      loss.VisibleNodes,
+				HiddenNodes:       loss.HiddenNodes,
+				FoldedEdges:       loss.FoldedEdges,
+				LostFields:        loss.LostFields,
+				Loss:              loss,
+				FieldOrder:        includedFieldIDsForRole(graph.Projection.Fields, role),
 			}
 			projection.Cases = append(projection.Cases, caseProjection)
 			events = append(events, ProjectionEvent{
