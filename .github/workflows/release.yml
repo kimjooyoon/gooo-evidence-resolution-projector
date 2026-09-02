@@ -6,7 +6,7 @@ on:
       tag:
         description: 'Existing annotated release tag to publish'
         required: true
-        default: v0.1.0
+        default: v0.1.1
         type: string
 
 permissions:
@@ -67,7 +67,7 @@ jobs:
           gh api "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" > .ci/draft-before-assets.json
           for existing in $(jq -r '.assets[].name' .ci/draft-before-assets.json); do
             case "$existing" in
-              projection-manifest.json|evidence-graph.json|projection-events.ndjson|user-view.md|operator-view.md|auditor-view.md|projection-receipt.json) ;;
+              projection-manifest.json|evidence-graph.json|projection-events.ndjson|user-view.md|operator-view.md|auditor-view.md|projection-receipt.json|reviewer-view.md|language-maintainer-view.md|projection-dossier.md|projection-artifact.json) ;;
               *) echo "unexpected pre-existing draft asset: $existing" >&2; exit 1 ;;
             esac
           done

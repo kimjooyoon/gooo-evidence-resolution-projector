@@ -1,0 +1,49 @@
+{
+  "schema": "gooo/evidence-resolution-projector/denominator/v1",
+  "contract_id": "evidence-resolution-projector-canonical-v1",
+  "authority": "released-gooo-read-only",
+  "append_only": true,
+  "previous_released_contract": {
+    "release": "v0.1.0",
+    "case_denominator": 9,
+    "cases_by_decision": {
+      "CLOSED": 3,
+      "UNKNOWN": 3,
+      "REFUTED": 3
+    },
+    "reader_resolutions": 3,
+    "caller_owned_output_kinds": 7
+  },
+  "current_contract": {
+    "release": "v0.1.1",
+    "case_denominator_minimum": 9,
+    "cases_by_decision": {
+      "CLOSED": 3,
+      "UNKNOWN": 3,
+      "REFUTED": 3
+    },
+    "reader_roles_minimum": ["USER", "REVIEWER", "LANGUAGE_MAINTAINER", "AUDITOR"],
+    "caller_owned_output_kinds_minimum": 7,
+    "proof_cells": 9,
+    "proof_choices": ["FOUNDATION", "COHERENCE", "REGRESSION"],
+    "indicators": ["DRIVER", "OUTCOME", "GUARDRAIL"]
+  },
+  "invariants": {
+    "decision_precedence": ["REFUTED", "UNKNOWN", "CLOSED"],
+    "unknown_frontier_fields": ["unknown.stage", "unknown.step", "unknown.reason", "unknown.unknown_class", "unknown.next_operation", "unknown.blocked_by"],
+    "runtime": {
+      "repository_writes": 0,
+      "source_mutations": 0,
+      "cross_project_required_gates": 0,
+      "output_scope": "CALLER_OWNED_OUTPUT_ONLY"
+    },
+    "forbidden_derived_fields": ["aggregate_score", "score", "percentage", "percent"]
+  },
+  "extension": {
+    "roles_are_projections_not_new_authority": true,
+    "loss_vectors": ["visible_nodes", "hidden_nodes", "folded_edges", "lost_fields"],
+    "canonical_graph_binding": "sha256(evidence-graph.json)",
+    "expansion_missing_input_decision": "UNKNOWN",
+    "expansion_restored_hidden_decision": "REFUTED"
+  }
+}
