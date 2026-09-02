@@ -61,13 +61,13 @@ jq -e '
 ' "$output_dir/projection-artifact.json" >/dev/null
 jq -e '
   (.projections | length == 4) and
-  (map(.role) | sort == ["AUDITOR", "LANGUAGE_MAINTAINER", "REVIEWER", "USER"]) and
-  ([.expansion_evaluations[] | .decision] | sort == ["CLOSED", "REFUTED", "UNKNOWN"]) and
-  ([.proof_cells[] | .proof_choice] | map(select(. == "FOUNDATION")) | length == 3) and
-  ([.proof_cells[] | .proof_choice] | map(select(. == "COHERENCE")) | length == 3) and
-  ([.proof_cells[] | .proof_choice] | map(select(. == "REGRESSION")) | length == 3) and
-  ([.proof_cells[] | .indicator] | map(select(. == "DRIVER")) | length == 3) and
-  ([.proof_cells[] | .indicator] | map(select(. == "OUTCOME")) | length == 3) and
-  ([.proof_cells[] | .indicator] | map(select(. == "GUARDRAIL")) | length == 3) and
+  (.projections | map(.role) | sort == ["AUDITOR", "LANGUAGE_MAINTAINER", "REVIEWER", "USER"]) and
+  (.expansion_evaluations | map(.decision) | sort == ["CLOSED", "REFUTED", "UNKNOWN"]) and
+  (.proof_cells | map(.proof_choice) | map(select(. == "FOUNDATION")) | length == 3) and
+  (.proof_cells | map(.proof_choice) | map(select(. == "COHERENCE")) | length == 3) and
+  (.proof_cells | map(.proof_choice) | map(select(. == "REGRESSION")) | length == 3) and
+  (.proof_cells | map(.indicator) | map(select(. == "DRIVER")) | length == 3) and
+  (.proof_cells | map(.indicator) | map(select(. == "OUTCOME")) | length == 3) and
+  (.proof_cells | map(.indicator) | map(select(. == "GUARDRAIL")) | length == 3) and
   (.runtime.repository_writes == 0 and .runtime.source_mutations == 0 and .runtime.cross_project_required_gates == 0)
 ' "$output_dir/projection-artifact.json" >/dev/null
