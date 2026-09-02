@@ -17,7 +17,7 @@ expected=(
   projection-dossier.md
   projection-artifact.json
 )
-test "$(jq '.assets | length' "$release_json")" -eq 7
+test "$(jq '.assets | length' "$release_json")" -eq 11
 for name in "${expected[@]}"; do
   local_path="$output_dir/$name"
   local_size=$(wc -c < "$local_path" | tr -d ' ')

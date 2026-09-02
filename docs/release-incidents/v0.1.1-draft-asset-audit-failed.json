@@ -1,0 +1,48 @@
+{
+  "schema": "gooo/evidence-resolution-projector/release-incident/v1",
+  "status": "OPERATIONAL_REFUTED",
+  "reason_code": "DRAFT_ASSET_AUDIT_FAILED",
+  "action": "BURNED_NO_REUSE",
+  "repository": "kimjooyoon/gooo-evidence-resolution-projector",
+  "release": {
+    "release_id": 381181802,
+    "tag": "v0.1.1",
+    "target_commit": "b367606e746e3a783577ca2d16749787fe65ed10",
+    "draft": true,
+    "immutable": false
+  },
+  "failed_run": {
+    "run_id": 33622661311,
+    "workflow": "immutable-release",
+    "failed_step": "Verify draft asset size and digest",
+    "url": "https://github.com/kimjooyoon/gooo-evidence-resolution-projector/actions/runs/33622661311"
+  },
+  "failure": {
+    "observed_asset_count": 11,
+    "stale_expected_asset_count": 7,
+    "cause": "The tag's release asset verifier retained the pre-extension seven-asset sentinel after the append-only projection extension.",
+    "asset_bytes_and_digests_verified_out_of_band": true
+  },
+  "assets_preserved_without_edit_or_delete": [
+    {"id": 541052402, "node_id": "RA_kwDOUKqTY84gP83y", "name": "auditor-view.md", "size": 18523, "digest": "sha256:9c67fa579121a34d44df6ddb3ef1ea1df040d1e384195c8db77442149a980bc0", "state": "uploaded"},
+    {"id": 541052412, "node_id": "RA_kwDOUKqTY84gP838", "name": "evidence-graph.json", "size": 57812, "digest": "sha256:a3b5374e21f9d32f5e645dd4adc5d9ab73b37075ebdbe01a19bdd4db72114aa0", "state": "uploaded"},
+    {"id": 541052423, "node_id": "RA_kwDOUKqTY84gP84H", "name": "language-maintainer-view.md", "size": 17972, "digest": "sha256:8224a34314883bbe60f7e05b50052a56be8d874af9dda6222030d1c1c1a0c493", "state": "uploaded"},
+    {"id": 541052434, "node_id": "RA_kwDOUKqTY84gP84S", "name": "operator-view.md", "size": 18168, "digest": "sha256:b8d9f5eed687d374fe6d1febc56ba3d927a4d8e518ab7f0083262832f47ddb7f", "state": "uploaded"},
+    {"id": 541052447, "node_id": "RA_kwDOUKqTY84gP84f", "name": "projection-artifact.json", "size": 267544, "digest": "sha256:4256621daa0ed3cb92a39982177c49651da737a5fdb6aa1e57ce7034e3f5f075", "state": "uploaded"},
+    {"id": 541052455, "node_id": "RA_kwDOUKqTY84gP84n", "name": "projection-dossier.md", "size": 5363, "digest": "sha256:aacebeefeb268835f0362f688e02d92537bae8b2a6bc5e5b004c036fe9bd0910", "state": "uploaded"},
+    {"id": 541052464, "node_id": "RA_kwDOUKqTY84gP84w", "name": "projection-events.ndjson", "size": 120277, "digest": "sha256:60a275a1be231d8fdce640f0718eeccc7950c62bf496452bd9663b0722a208c1", "state": "uploaded"},
+    {"id": 541052471, "node_id": "RA_kwDOUKqTY84gP843", "name": "projection-manifest.json", "size": 11613, "digest": "sha256:005e93eb743c275abaee4983f5651eec13c28af3bec9695b9bcfd4bb026dff6a", "state": "uploaded"},
+    {"id": 541052482, "node_id": "RA_kwDOUKqTY84gP85C", "name": "projection-receipt.json", "size": 2733, "digest": "sha256:ac4ef6fd6ab6ffafa65be0d91d1a457b44b2d45069bd7df93310f4fa6b189060", "state": "uploaded"},
+    {"id": 541052500, "node_id": "RA_kwDOUKqTY84gP85U", "name": "reviewer-view.md", "size": 18168, "digest": "sha256:b8d9f5eed687d374fe6d1febc56ba3d927a4d8e518ab7f0083262832f47ddb7f", "state": "uploaded"},
+    {"id": 541052506, "node_id": "RA_kwDOUKqTY84gP85a", "name": "user-view.md", "size": 18318, "digest": "sha256:fbe2a3381667ff17b685e1d1be06e5ca9b157f3b312596d4ea2e5633844a0f43", "state": "uploaded"}
+  ],
+  "preservation": {
+    "failed_run_retained": true,
+    "draft_release_retained": true,
+    "tag_retained": true,
+    "assets_edited": 0,
+    "assets_deleted": 0,
+    "assets_reused_for_next_release": 0
+  },
+  "remediation": "Correct the eleven-asset verifier in a follow-up PR, merge with green Actions, and create a fresh v0.1.2 draft from the merge commit."
+}
